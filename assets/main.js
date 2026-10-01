@@ -779,15 +779,44 @@
       introRunning = true;
       hero.classList.add("is-intro");
       if (lenis) lenis.stop();
-      var term = $("#termText");
+      var term = $("#termText"), termEl = $("#terminal");
+      var prompt = $(".terminal__prompt", termEl), tcaret = $(".terminal__caret", termEl);
       var fills = $$(".L__fill", heroSvg);
+      var drawFills = fills.filter(function (f) { return !f.matches(".L__i, .L__chev, .L__arm"); });
+      var iFill = $(".L__i", heroSvg), chevFill = $(".L__chev", heroSvg), arms = $$(".L__arm", heroSvg);
       var lineGroups = $$(".L__line", heroSvg);
       var lines = lineGroups.reduce(function (acc, el) { return acc.concat(el.tagName === "path" ? [el] : $$("path", el)); }, []);
       lines.forEach(function (p) { var len = p.getTotalLength(); p.style.strokeDasharray = len; p.style.strokeDashoffset = len; });
-      var typed = { n: 0 }, cmd = "init bavix";
+      var typed = { n: 0 }, scr = { p: 0 }, cmd = "init bavix", GL = "_/\\<>[]{}#$%01=+*";
       var setStatus = function (t) { status.textContent = t; };
-      gsap.set("#terminal", { autoAlpha: 1, scale: 1 });
+      var clones = [];
+      gsap.set(termEl, { autoAlpha: 1, scale: 1 });
+      termEl.style.visibility = "";
       term.textContent = "";
+
+      /* «>» из терминала летит в шеврон X, курсор — в букву I (как в ролике identity.build) */
+      function morph(tl, at) {
+        var fly = function (from, toEl, cls, extra) {
+          var a = from.getBoundingClientRect(), b = toEl.getBoundingClientRect();
+          var el = cls === "morph--chev" ? document.createElementNS(SVGNS, "svg") : document.createElement("div");
+          el.setAttribute("class", "morph " + cls);
+          if (cls === "morph--chev") { el.setAttribute("viewBox", "776.5 0 94.7 130"); el.setAttribute("preserveAspectRatio", "none"); el.innerHTML = '<path fill="currentColor" d="M776.5,0 L806.2,0 L871.2,65 L806.2,130 L776.5,130 L841.5,65 Z"/>'; }
+          document.body.appendChild(el); clones.push(el);
+          gsap.set(el, { left: a.left, top: a.top, width: a.width, height: a.height });
+          from.style.visibility = "hidden";
+          gsap.to(el, Object.assign({ left: b.left, top: b.top, width: b.width, height: b.height, duration: .55, ease: "power3.inOut" }, extra || {}));
+        };
+        tl.call(function () {
+          fly(prompt, chevFill, "morph--chev");
+          fly(tcaret, iFill, "morph--caret", { backgroundColor: "#ffffff", delay: .05 });
+        }, null, at);
+        tl.call(function () { iFill.style.opacity = chevFill.style.opacity = 1; }, null, at + .58);
+        tl.call(function () {
+          clones.forEach(function (c) { c.remove(); }); clones = [];
+          termEl.style.visibility = "hidden";
+          prompt.style.visibility = tcaret.style.visibility = "";
+        }, null, at + .64);
+      }
 
       introTl = gsap.timeline({ defaults: { ease: "power3.out" }, onComplete: endIntro });
       introTl.set(".hero__stage", { autoAlpha: 0 })
@@ -799,26 +828,45 @@
         .set(fills, { opacity: 0 })
         .set(lineGroups, { opacity: 1 })
         .set(hudbar, { scaleX: 0 })
-        .call(setStatus, ["$ init"])
+        .call(setStatus, ["$ ready"])
+        .call(setStatus, ["$ typing"], null, .3)
         .to(typed, {
-          n: cmd.length, duration: .7, ease: "none", delay: .35,
+          n: cmd.length, duration: .75, ease: "none", delay: .3,
           onUpdate: function () {
             var s = cmd.slice(0, Math.round(typed.n));
-            term.innerHTML = s.length > 5 ? "init <b>" + s.slice(5) + "</b>" : s;
+            term.innerHTML = s.length > 4 ? "init<b>" + s.slice(4) + "</b>" : s;
           }
         })
-        .to({}, { duration: .15 })
-        .to("#terminal", { autoAlpha: 0, scale: .96, duration: .25, ease: "power2.in" })
+        .to({}, { duration: .2 })
+        /* текст рассыпается в символы и исчезает */
+        .to(scr, {
+          p: 1, duration: .38, ease: "none",
+          onUpdate: function () {
+            var gone = Math.floor(scr.p * (cmd.length + 2)), out = "";
+            for (var i = 0; i < cmd.length; i++) {
+              if (i < gone - 2) out += " ";
+              else if (Math.random() < .55) out += '<b style="color:var(--c-em)">' + GL[(Math.random() * GL.length) | 0] + "</b>";
+              else out += i > 4 ? "<b>" + cmd[i] + "</b>" : cmd[i];
+            }
+            term.innerHTML = out;
+          }
+        })
         .call(setStatus, ["$ tracing"])
-        .to(".hero__grid i", { scaleY: 1, duration: .8, stagger: .04, ease: "expo.out" }, "<")
-        .set(".hero__stage", { autoAlpha: 1 }, "<.1")
-        .to(".guide", { scaleX: 1, duration: .9, stagger: .08, ease: "expo.out" }, "<")
-        .to(lines, { strokeDashoffset: 0, duration: .9, stagger: .03, ease: "power2.inOut" }, "<.1")
-        .to(".dimension i", { scaleX: 1, duration: .7, ease: "expo.out" }, "<.3")
-        .to(hudbar, { scaleX: .64, duration: 1.1, ease: "none" }, "<")
-        .call(setStatus, ["$ compiling"], null, "<")
-        .to(fills, { opacity: 1, duration: .05, stagger: { each: .06, from: "random" }, ease: "steps(1)" })
-        .to(fills, { opacity: .3, duration: .04, yoyo: true, repeat: 3, stagger: .03, ease: "steps(1)" })
+        .set(".hero__stage", { autoAlpha: 1 })
+        .addLabel("morph");
+      morph(introTl, introTl.duration());
+      introTl
+        .to(".hero__grid i", { scaleY: 1, duration: .8, stagger: .04, ease: "expo.out" }, "morph")
+        .to(".guide", { scaleX: 1, duration: .9, stagger: .08, ease: "expo.out" }, "morph+=.1")
+        .to(lines, { strokeDashoffset: 0, duration: .85, stagger: .06, ease: "power2.inOut" }, "morph+=.45")
+        .to(".dimension i", { scaleX: 1, duration: .7, ease: "expo.out" }, "morph+=.6")
+        .to(hudbar, { scaleX: .64, duration: 1.1, ease: "none" }, "morph+=.3")
+        .call(setStatus, ["$ compiling"], null, "morph+=.3")
+        .to(drawFills, { opacity: 1, duration: .05, stagger: { each: .07 }, ease: "steps(1)" }, "morph+=1.35")
+        .to(drawFills, { opacity: .3, duration: .04, yoyo: true, repeat: 3, stagger: .03, ease: "steps(1)" })
+        /* половинки X прилетают из-за кадра */
+        .fromTo(arms, { opacity: 1, x: 420, y: function (i, el) { return +el.getAttribute("data-dir") * 300; } },
+          { x: 0, y: 0, duration: .28, ease: "power3.in" })
         .addLabel("glitch")
         .call(function () { ripple(innerWidth / 2, innerHeight / 2); }, null, "glitch")
         .to(".hero__ghost", { opacity: .85, duration: .05 }, "glitch")
@@ -841,9 +889,11 @@
       function endIntro() {
         introRunning = false;
         hero.classList.remove("is-intro");
+        clones.forEach(function (c) { c.remove(); }); clones = [];
+        prompt.style.visibility = tcaret.style.visibility = "";
         lines.forEach(function (p) { p.style.strokeDasharray = ""; p.style.strokeDashoffset = ""; });
         gsap.set(lineGroups, { clearProps: "opacity" });
-        gsap.set(fills, { clearProps: "opacity" });
+        gsap.set(fills, { clearProps: "opacity,transform" });
         gsap.set(".hero__tag", { clearProps: "letterSpacing" });
         if (lenis && con.hidden) lenis.start();
         ["pointerdown", "keydown", "wheel", "touchstart"].forEach(function (ev) { window.removeEventListener(ev, skip); });

@@ -182,10 +182,13 @@ em { font-style: normal; background: var(--em-bg); color: var(--em-fg); padding:
 
 .terminal {
   position: absolute !important; z-index: 4 !important; left: 50%; top: 50%; transform: translate(-50%, -50%);
-  display: none; align-items: center; gap: 18px; font: 400 clamp(28px, 4vw, 52px)/1 var(--f-mono); color: var(--c-white);
+  display: none; align-items: center; gap: .45em; font: 400 clamp(30px, 5.4vw, 104px)/1 var(--f-mono); color: var(--c-white); white-space: nowrap;
 }
 .is-intro .terminal { display: flex; }
-.terminal__prompt { font-weight: 700; }
+.terminal__prompt { height: .78em; width: auto; aspect-ratio: 94.7 / 130; color: var(--c-white); flex: none; }
+.morph { position: fixed; z-index: 40; pointer-events: none; }
+.morph--caret { background: var(--c-em); }
+.morph--chev { color: var(--c-white); }
 .terminal__cmd { color: var(--dim); white-space: pre; }
 .terminal__cmd b { color: var(--c-white); font-weight: 400; }
 .terminal__caret { width: 4px; height: 1.1em; background: var(--c-em); animation: blink 1s steps(1) infinite; }
@@ -205,6 +208,7 @@ em { font-style: normal; background: var(--em-bg); color: var(--em-fg); padding:
 .L.is-hover .L__fill { opacity: .08; }
 .L.is-hover .L__line { opacity: 1; }
 .L__fill, .L__line { transition: opacity .25s; }
+.is-intro .L__fill, .is-intro .L__line { transition: none; }
 .anchor { fill: var(--c-ink); stroke: var(--c-em); stroke-width: 1; vector-effect: non-scaling-stroke; opacity: 0; transition: opacity .25s; }
 .L.is-hover .anchor { opacity: 1; }
 .hero__cursor { fill: var(--c-em); animation: blink 1.05s steps(1) infinite; }

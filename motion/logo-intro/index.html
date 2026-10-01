@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>BAVIX identity.build</title>
+<!--
+  Интро логотипа BAVIX. Каждый кадр — чистая функция времени render(t), поэтому рендер покадрово точный.
+  Параметры: ?w=1920&h=1080&end=em|dark&t=5.25 (t замораживает кадр для скриншота).
+  Тайминг совпадает со звуком оригинального ролика: щелчки 0.95–1.8, удар 2.25, главный удар 5.25, волна 7.0–7.6.
+-->
+<style>
+  @font-face { font-family: "Unbounded"; src: url("../../assets/fonts/Unbounded-Variable.woff2") format("woff2"); font-weight: 200 900; }
+  @font-face { font-family: "JBM"; src: url("../../assets/fonts/jetbrains-mono-latin-400-normal.woff2") format("woff2"); font-weight: 400; }
+  @font-face { font-family: "JBM"; src: url("../../assets/fonts/jetbrains-mono-cyrillic-400-normal.woff2") format("woff2"); font-weight: 400; unicode-range: U+0400-045F; }
+  :root { --em: #00B37E; --ink: #111111; --white: #F4F4F2; --mute: #8C8C8C; --red: #ff3b5c; --cyan: #36e2ff; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #000; overflow: hidden; }
+  #stage { position: relative; overflow: hidden; background: var(--ink); color: var(--white); }
+  .abs { position: absolute; left: 0; top: 0; }
+  .layer { position: absolute; inset: 0; }
+  #grain { position: absolute; inset: 0; opacity: .06; mix-blend-mode: screen; pointer-events: none; }
+  #vignette { position: absolute; inset: 0; background: radial-gradient(120% 95% at 50% 48%, transparent 52%, rgba(0,0,0,.55) 100%); }
+  .vline { position: absolute; top: 0; width: 1px; background: rgba(255,255,255,.06); transform-origin: top; }
+  .guide { position: absolute; left: 0; height: 1px; background: rgba(0,179,126,.55); transform-origin: left; }
+  .glabel { position: absolute; font: 400 var(--fs-xs) / 1 "JBM", monospace; color: var(--em); letter-spacing: .06em; white-space: nowrap; }
+  .hud { position: absolute; font: 400 var(--fs-hud) / 1 "JBM", monospace; color: #6f6f6f; letter-spacing: .04em; white-space: nowrap; display: flex; align-items: center; gap: .8em; }
+  .hud i { display: block; width: 1.1em; height: 1.1em; border: 1px solid #3a3a3a; }
+  #term { position: absolute; font: 400 var(--fs-term) / 1 "JBM", monospace; white-space: pre; color: var(--mute); }
+  #term b { font-weight: 400; color: var(--white); }
+  #term s { text-decoration: none; color: var(--em); }
+  #caret { position: absolute; background: var(--em); }
+  #chev { position: absolute; color: var(--white); overflow: visible; }
+  #logo { position: absolute; overflow: visible; }
+  .fill { fill: var(--white); }
+  .line { fill: none; stroke: var(--em); stroke-width: 1.4; vector-effect: non-scaling-stroke; }
+  .anchor { fill: var(--ink); stroke: var(--em); stroke-width: 1; vector-effect: non-scaling-stroke; }
+  .ghost { position: absolute; mix-blend-mode: screen; overflow: visible; }
+  #ring { position: absolute; border: 1px solid rgba(0,179,126,.9); border-radius: 50%; }
+  #dim { position: absolute; height: 1px; background: rgba(0,179,126,.6); transform-origin: left; }
+  #dim::before, #dim::after { content: ""; position: absolute; top: -6px; width: 1px; height: 13px; background: rgba(0,179,126,.6); }
+  #dim::before { left: 0; } #dim::after { right: 0; }
+  #dimLabel { position: absolute; font: 400 var(--fs-xs) / 1 "JBM", monospace; color: var(--em); letter-spacing: .06em; transform: translateX(-50%); white-space: nowrap; }
+  .tag { position: absolute; font: 500 var(--fs-tag) / 1 "Unbounded", sans-serif; letter-spacing: .42em; color: #9a9a9a; white-space: pre; transform: translateX(-50%); }
+  .tag s { text-decoration: none; color: var(--em); }
+  #emLayer { position: absolute; inset: 0; background: var(--em); color: var(--ink); }
+  #emLayer .tag { color: rgba(17,17,17,.72); }
+  #emLayer .tag s { color: var(--ink); }
+  #emLayer .hud { color: rgba(17,17,17,.62); }
+  #emLayer .hud i { border-color: rgba(17,17,17,.35); }
+  #emGhost { position: absolute; color: var(--ink); opacity: .07; overflow: visible; }
+  #flash { position: absolute; inset: 0; background: var(--em); mix-blend-mode: screen; opacity: 0; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="bx" viewBox="0 0 936.2 130"><path fill="currentColor" fill-rule="evenodd" d="M0,0 H124.25 A37.75,37.75 0 0 1 150.37,65 A37.75,37.75 0 0 1 124.25,130 H0 Z M21,21 H124.25 A16.75,16.75 0 0 1 124.25,54.5 H21 Z M21,75.5 H124.25 A16.75,16.75 0 0 1 124.25,109 H21 Z M228.15,130 L306.15,0 L323.25,0 L401.25,130 L376.76,130 L314.7,26.57 L252.64,130 Z M428.15,0 L506.15,130 L523.25,130 L601.25,0 L576.76,0 L514.7,103.43 L452.64,0 Z M670,0 L691,0 L691,130 L670,130 Z M776.5,0 L806.2,0 L871.2,65 L806.2,130 L776.5,130 L841.5,65 Z M906.5,0 L936.2,0 L882.85,53.35 L868,38.5 Z M906.5,130 L936.2,130 L882.85,76.65 L868,91.5 Z"/></symbol>
+    <symbol id="chevS" viewBox="776.5 0 94.7 130"><path fill="currentColor" d="M776.5,0 L806.2,0 L871.2,65 L806.2,130 L776.5,130 L841.5,65 Z"/></symbol>
+  </defs>
+</svg>
+
+<div id="stage">
+  <canvas id="grain"></canvas>
+  <div class="layer" id="grid"></div>
+  <div class="layer" id="guides"></div>
+  <div id="dim"></div><div id="dimLabel">936 × 130</div>
+
+  <!-- логотип: B, Λ, V рисуются чертежом; I и шеврон X прилетают из терминала -->
+  <svg id="logo" viewBox="0 0 1024 130">
+    <g id="L0"><path class="fill" fill-rule="evenodd" d="M0,0 H124.25 A37.75,37.75 0 0 1 150.37,65 A37.75,37.75 0 0 1 124.25,130 H0 Z M21,21 H124.25 A16.75,16.75 0 0 1 124.25,54.5 H21 Z M21,75.5 H124.25 A16.75,16.75 0 0 1 124.25,109 H21 Z"/>
+      <path class="line" pathLength="1" d="M0,0 H124.25 A37.75,37.75 0 0 1 150.37,65 A37.75,37.75 0 0 1 124.25,130 H0 Z M21,21 H124.25 A16.75,16.75 0 0 1 124.25,54.5 H21 Z M21,75.5 H124.25 A16.75,16.75 0 0 1 124.25,109 H21 Z"/></g>
+    <g id="L1"><path class="fill" d="M228.15,130 L306.15,0 L323.25,0 L401.25,130 L376.76,130 L314.7,26.57 L252.64,130 Z"/>
+      <path class="line" pathLength="1" d="M228.15,130 L306.15,0 L323.25,0 L401.25,130 L376.76,130 L314.7,26.57 L252.64,130 Z"/></g>
+    <g id="L2"><path class="fill" d="M428.15,0 L506.15,130 L523.25,130 L601.25,0 L576.76,0 L514.7,103.43 L452.64,0 Z"/>
+      <path class="line" pathLength="1" d="M428.15,0 L506.15,130 L523.25,130 L601.25,0 L576.76,0 L514.7,103.43 L452.64,0 Z"/></g>
+    <g id="L3"><path class="fill" d="M670,0 L691,0 L691,130 L670,130 Z"/></g>
+    <g id="L4"><path class="fill" d="M776.5,0 L806.2,0 L871.2,65 L806.2,130 L776.5,130 L841.5,65 Z"/></g>
+    <g id="armT"><path class="fill" d="M906.5,0 L936.2,0 L882.85,53.35 L868,38.5 Z"/><path class="line" pathLength="1" d="M906.5,0 L936.2,0 L882.85,53.35 L868,38.5 Z"/></g>
+    <g id="armB"><path class="fill" d="M906.5,130 L936.2,130 L882.85,76.65 L868,91.5 Z"/><path class="line" pathLength="1" d="M906.5,130 L936.2,130 L882.85,76.65 L868,91.5 Z"/></g>
+    <g id="anchors"></g>
+    <rect id="under" x="966" y="109" width="58" height="21" fill="var(--em)"/>
+  </svg>
+  <svg class="ghost" id="ghR" viewBox="0 0 1024 130"><use href="#bx" width="936.2" height="130" style="color:var(--red)"/></svg>
+  <svg class="ghost" id="ghC" viewBox="0 0 1024 130"><use href="#bx" width="936.2" height="130" style="color:var(--cyan)"/></svg>
+
+  <div id="ring"></div>
+  <div class="tag" id="tag"></div>
+
+  <div id="term"></div>
+  <svg id="chev"><use href="#chevS"/></svg>
+  <div id="caret"></div>
+
+  <div class="hud" id="hudTL"><i style="border-width:1px 0 0 1px"></i>bavix / identity.build</div>
+  <div class="hud" id="hudTR">T+00:00:00:00<i style="border-width:1px 1px 0 0"></i></div>
+  <div class="hud" id="hudBL"><i style="border-width:0 0 1px 1px"></i><span id="status">$ ready</span></div>
+  <div class="hud" id="hudBR"><span id="bar" style="display:block;width:7em;height:2px;background:#2a2a2a;position:relative"><span id="barFill" style="position:absolute;inset:0;background:var(--em);transform-origin:left"></span></span><i style="border-width:0 1px 1px 0"></i></div>
+
+  <div id="flash"></div>
+
+  <!-- финал: изумрудная заливка с шевронным фронтом -->
+  <div id="emLayer">
+    <svg id="emGhost"><use href="#chevS"/></svg>
+    <svg id="emLogo" class="abs" style="overflow:visible" viewBox="0 0 1024 130"><use href="#bx" width="936.2" height="130"/><rect id="emUnder" x="966" y="109" width="58" height="21" fill="currentColor"/></svg>
+    <div class="tag" id="emTag"></div>
+    <div class="hud" id="emTL"><i style="border-width:1px 0 0 1px"></i>bavix / identity.build</div>
+    <div class="hud" id="emBL"><i style="border-width:0 0 1px 1px"></i>$ build ok · 0 errors</div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var q = new URLSearchParams(location.search);
+  var W = +q.get("w") || 1920, H = +q.get("h") || 1080, END = q.get("end") || "em", FPS = 60, DUR = 9;
+  var $ = function (id) { return document.getElementById(id); };
+  var stage = $("stage");
+  stage.style.width = W + "px"; stage.style.height = H + "px";
+
+  /* ---------- раскладка под формат ---------- */
+  var portrait = H > W, square = H === W;
+  var unit = Math.min(W, H);
+  var LW = portrait ? W * 0.80 : square ? W * 0.80 : W * 0.63;   // ширина логотипа вместе с «_»
+  if (H / W > 1.2 && H / W < 1.4) LW = W * 0.80;                  // 4:5
+  var k = LW / 1024, LH = 130 * k;
+  var LX = (W - LW) / 2, LY = H / 2 - LH / 2 - LH * 0.18;
+  var termFs = portrait || square || H / W > 1.2 ? W * 0.075 : W * 0.058;
+  var css = stage.style;
+  css.setProperty("--fs-term", termFs + "px");
+  css.setProperty("--fs-hud", Math.max(11, unit * 0.0115) + "px");
+  css.setProperty("--fs-xs", Math.max(10, unit * 0.0098) + "px");
+  css.setProperty("--fs-tag", (portrait || H / W > 1.2 || square ? W * 0.019 : W * 0.0085) + "px");
+  /* безопасные зоны: для 9:16 HUD держим вне интерфейса Reels */
+  var padX = Math.round(unit * 0.045), padTop = portrait ? H * 0.13 : Math.round(unit * 0.05), padBot = portrait ? H * 0.2 : Math.round(unit * 0.05);
+
+  function place(el, x, y) { el.style.left = x + "px"; el.style.top = y + "px"; }
+  ["hudTL", "emTL"].forEach(function (id) { place($(id), padX, padTop); });
+  place($("hudTR"), W - padX, padTop); $("hudTR").style.transform = "translateX(-100%)";
+  ["hudBL", "emBL"].forEach(function (id) { var el = $(id); place(el, padX, H - padBot); el.style.transform = "translateY(-100%)"; });
+  place($("hudBR"), W - padX, H - padBot); $("hudBR").style.transform = "translate(-100%,-100%)";
+
+  var logo = $("logo");
+  [logo, $("ghR"), $("ghC"), $("emLogo")].forEach(function (el) { el.style.left = LX + "px"; el.style.top = LY + "px"; el.style.width = LW + "px"; el.style.height = LH + "px"; el.style.position = "absolute"; });
+
+  /* сетка и направляющие */
+  var grid = $("grid"), vlines = [];
+  [0.11, 0.215, 0.31, 0.5, 0.625, 0.69, 0.78, 0.89].forEach(function (f) {
+    var d = document.createElement("div"); d.className = "vline"; d.style.left = (W * f) + "px"; d.style.height = H + "px"; grid.appendChild(d); vlines.push(d);
+  });
+  var guides = [], glabels = [];
+  [["CAP +130", 0], ["MID +65", 0.5], ["BASE 0", 1]].forEach(function (g) {
+    var d = document.createElement("div"); d.className = "guide"; d.style.top = (LY + LH * g[1]) + "px"; d.style.width = W + "px"; $("guides").appendChild(d); guides.push(d);
+    var l = document.createElement("div"); l.className = "glabel"; l.textContent = g[0]; l.style.left = padX + "px"; l.style.top = (LY + LH * g[1] - unit * 0.02) + "px"; $("guides").appendChild(l); glabels.push(l);
+  });
+  if (LX < unit * 0.16) glabels.forEach(function (l) { l.style.display = "none"; });
+  var dim = $("dim"); place(dim, LX, LY + LH + LH * 0.32); dim.style.width = (936.2 * k) + "px";
+  place($("dimLabel"), LX + 936.2 * k / 2, LY + LH + LH * 0.45);
+
+  /* опорные точки букв B, Λ, V и стрелок X */
+  var anchorsG = $("anchors"), anchorSets = [[], [], [], [], [], []];
+  function pts(d) { var out = [], m, re = /([MLHVAZ])([^MLHVAZ]*)/gi, x = 0, y = 0; while ((m = re.exec(d))) { var c = m[1].toUpperCase(), n = (m[2].match(/-?\d*\.?\d+/g) || []).map(Number); if (c === "M" || c === "L") { x = n[0]; y = n[1]; out.push([x, y]); } else if (c === "H") { x = n[0]; out.push([x, y]); } else if (c === "V") { y = n[0]; out.push([x, y]); } else if (c === "A") { x = n[5]; y = n[6]; out.push([x, y]); } } return out; }
+  [["L0", 0], ["L1", 1], ["L2", 2], ["armT", 4], ["armB", 5]].forEach(function (p) {
+    var seen = {};
+    pts($(p[0]).querySelector(".line").getAttribute("d")).forEach(function (pt) {
+      var key = Math.round(pt[0]) + ":" + Math.round(pt[1]); if (seen[key]) return; seen[key] = 1;
+      var r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+      r.setAttribute("class", "anchor"); r.setAttribute("x", pt[0] - 4.5); r.setAttribute("y", pt[1] - 4.5); r.setAttribute("width", 9); r.setAttribute("height", 9);
+      anchorsG.appendChild(r); anchorSets[p[1]].push(r);
+    });
+  });
+
+  /* подпись */
+  var TAG = "CRM · ПРИЛОЖЕНИЯ · САЙТЫ · ИИ";
+  var tagY = LY + LH + LH * (portrait || H / W > 1.2 || square ? 0.75 : 0.72);
+  [$("tag"), $("emTag")].forEach(function (el) { place(el, W / 2 + (parseFloat(getComputedStyle(el).letterSpacing) || 0) / 2, tagY); });
+
+  /* финальная суперграфика на изумруде */
+  var eg = $("emGhost"), egH = H * 1.25; eg.style.height = egH + "px"; eg.style.width = (egH * 94.7 / 130) + "px";
+  place(eg, W - egH * 94.7 / 130 * (portrait ? 0.55 : 0.62), H * 0.06);
+
+  /* зерно: статичный шум, сдвигается детерминированно по кадрам */
+  var gc = $("grain"); gc.width = 256; gc.height = 256; var gx = gc.getContext("2d"), img = gx.createImageData(256, 256), seed = 7;
+  function rnd() { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
+  for (var i = 0; i < img.data.length; i += 4) { var v = rnd() * 255; img.data[i] = img.data[i + 1] = img.data[i + 2] = v; img.data[i + 3] = 255; }
+  gx.putImageData(img, 0, 0);
+  gc.style.width = W + "px"; gc.style.height = H + "px"; gc.style.imageRendering = "pixelated";
+  function hash(n) { var x = Math.sin(n * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); }
+
+  /* ---------- утилиты времени ---------- */
+  function seg(t, a, b) { return t <= a ? 0 : t >= b ? 1 : (t - a) / (b - a); }
+  var E = {
+    out3: function (p) { return 1 - Math.pow(1 - p, 3); },
+    io3: function (p) { return p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2; },
+    expo: function (p) { return p === 1 ? 1 : 1 - Math.pow(2, -10 * p); },
+    in3: function (p) { return p * p * p; },
+    back: function (p) { var c = 1.7; return 1 + (c + 1) * Math.pow(p - 1, 3) + c * Math.pow(p - 1, 2); }
+  };
+  function lerp(a, b, p) { return a + (b - a) * p; }
+  var GLYPH = "_/\\<>[]{}#$%01=+*";
+
+  /* ширина символа моноширинного шрифта */
+  var cw = 0;
+  function measure() { var c = document.createElement("canvas").getContext("2d"); c.font = "400 " + termFs + "px JBM"; cw = c.measureText("0").width; }
+
+  /* позиция терминала: строка "> init bavix" по центру */
+  var CMD = "init bavix";
+  var chev = $("chev"), caret = $("caret"), term = $("term");
+  function termGeom() {
+    var chevH = termFs * 0.78, chevW = chevH * 94.7 / 130, gap = termFs * 0.55;
+    var total = chevW + gap + cw * CMD.length + termFs * 0.25;
+    var x0 = W / 2 - total / 2, cy = H / 2;
+    return { chevH: chevH, chevW: chevW, chevX: x0, chevY: cy - chevH / 2, textX: x0 + chevW + gap, cy: cy };
+  }
+
+  /* ---------- кадр ---------- */
+  function render(t) {
+    var fr = Math.round(t * FPS);
+    var g = termGeom();
+
+    /* HUD */
+    var sec = Math.floor(t), ff = fr % FPS;
+    $("hudTR").firstChild.nodeValue = "T+00:00:" + String(sec).padStart(2, "0") + ":" + String(ff).padStart(2, "0");
+    var hudIn = E.out3(seg(t, 0.05, 0.6));
+    ["hudTL", "hudTR", "hudBL", "hudBR"].forEach(function (id) { $(id).style.opacity = hudIn; });
+    var st = t < 0.9 ? "$ ready" : t < 2.25 ? "$ typing" + (fr % 40 < 20 ? "_" : " ") : t < 3.0 ? "$ tracing" : t < 5.25 ? "$ compiling  " + String(Math.round(E.io3(seg(t, 3.0, 5.2)) * 100)).padStart(3, " ") + "%" : "$ build ok · 0 errors";
+    $("status").textContent = st;
+    $("status").style.color = t >= 5.25 ? "var(--em)" : "";
+    $("barFill").style.transform = "scaleX(" + (t < 3 ? E.out3(seg(t, 0.5, 2.6)) * 0.12 : t < 5.25 ? 0.12 + E.io3(seg(t, 3.0, 5.2)) * 0.88 : 1) + ")";
+
+    /* зерно */
+    gc.style.transform = "translate(" + (-hash(fr) * 40) + "px," + (-hash(fr + 99) * 40) + "px) scale(1.06)";
+
+    /* сетка и направляющие */
+    vlines.forEach(function (v, i) { v.style.transform = "scaleY(" + E.expo(seg(t, 2.75 + i * 0.04, 3.45 + i * 0.04)) + ")"; v.style.opacity = 1 - E.out3(seg(t, 5.45, 6.1)); });
+    guides.forEach(function (gd, i) { gd.style.transform = "scaleX(" + E.expo(seg(t, 2.8 + i * 0.08, 3.6 + i * 0.08)) + ")"; gd.style.opacity = 0.5 * (1 - E.out3(seg(t, 5.4, 5.95))); });
+    glabels.forEach(function (l, i) { l.style.opacity = seg(t, 3.0 + i * 0.08, 3.2 + i * 0.08) * (1 - seg(t, 5.4, 5.8)); });
+    dim.style.transform = "scaleX(" + E.expo(seg(t, 3.6, 4.2)) + ")"; dim.style.opacity = 1 - seg(t, 5.4, 5.9);
+    $("dimLabel").style.opacity = seg(t, 3.9, 4.1) * (1 - seg(t, 5.4, 5.8));
+
+    /* терминал: появление, печать, рассыпание */
+    var typed = Math.floor(seg(t, 0.95, 1.8) * CMD.length + 1e-6);
+    var txt = CMD.slice(0, typed), html = "";
+    if (t < 2.25) {
+      html = txt.length > 4 ? "init<b>" + txt.slice(4) + "</b>" : txt;
+    } else if (t < 2.68) {
+      var p = seg(t, 2.25, 2.68), gone = Math.floor(p * (CMD.length + 2));
+      for (var ci = 0; ci < CMD.length; ci++) {
+        if (ci < gone - 2) html += " ";
+        else if (hash(fr * 13 + ci) < 0.55) html += "<s>" + GLYPH[Math.floor(hash(fr * 7 + ci * 3) * GLYPH.length)] + "</s>";
+        else html += ci > 4 ? "<b>" + CMD[ci] + "</b>" : CMD[ci];
+      }
+    }
+    term.innerHTML = html;
+    place(term, g.textX, g.cy - termFs * 0.55);
+    term.style.opacity = t < 0.3 ? 0 : 1;
+
+    /* шеврон «>» → шеврон X */
+    var cp = E.io3(seg(t, 2.62, 3.2));
+    var tx = LX + 776.5 * k, ty = LY, th = LH;
+    var cH = lerp(g.chevH, th, cp), cX = lerp(g.chevX, tx, cp), cY = lerp(g.chevY, ty, cp);
+    var chevIn = E.back(seg(t, 0.3, 0.6));
+    chev.style.height = cH + "px"; chev.style.width = (cH * 94.7 / 130) + "px";
+    place(chev, cX - (1 - chevIn) * termFs * 0.6, cY);
+    chev.style.opacity = Math.min(1, seg(t, 0.3, 0.45) * 1.2);
+    chev.style.display = t >= 3.2 ? "none" : "";
+
+    /* курсор → буква I */
+    var caretX0 = g.textX + cw * (t < 2.25 ? typed : CMD.length) + termFs * 0.08;
+    var caretH0 = termFs * 1.05, caretW0 = Math.max(2, termFs * 0.075);
+    var ip = E.io3(seg(t, 2.7, 3.2));
+    var iX = LX + 670 * k, iW = 21 * k;
+    caret.style.left = lerp(caretX0, iX, ip) + "px";
+    caret.style.top = lerp(g.cy - caretH0 / 2, LY, ip) + "px";
+    caret.style.width = lerp(caretW0, iW, ip) + "px";
+    caret.style.height = lerp(caretH0, LH, ip) + "px";
+    var blinkOn = t > 0.95 && t < 1.8 ? 1 : (Math.floor(t / 0.53) % 2 === 0 ? 1 : 0);
+    caret.style.opacity = t < 0.5 ? 0 : (ip > 0 ? 1 : blinkOn);
+    caret.style.background = ip >= 1 ? "var(--white)" : "rgb(" + Math.round(lerp(0, 244, ip)) + "," + Math.round(lerp(179, 244, ip)) + "," + Math.round(lerp(126, 242, ip)) + ")";
+    caret.style.display = t >= 3.2 ? "none" : "";
+
+    /* логотип */
+    logo.style.display = t >= 2.7 ? "" : "none";
+    $("L3").style.opacity = t >= 3.2 ? 1 : 0;
+    $("L4").style.opacity = t >= 3.2 ? 1 : 0;
+    var drawStart = [3.25, 3.45, 3.65];
+    [0, 1, 2].forEach(function (i) {
+      var L = $("L" + i), line = L.querySelector(".line"), fill = L.querySelector(".fill");
+      var dp = E.io3(seg(t, drawStart[i], drawStart[i] + 0.75));
+      line.style.strokeDasharray = "1"; line.style.strokeDashoffset = String(1 - dp);
+      line.style.opacity = t < drawStart[i] ? 0 : 1 - seg(t, 4.85, 5.3);
+      /* заливка: ступенчатое мерцание, как в оригинале */
+      var fs = 4.3 + i * 0.16, fp = seg(t, fs, fs + 0.28);
+      var flick = fp >= 1 ? 1 : fp <= 0 ? 0 : (hash(fr * 3 + i * 17) < fp ? 1 : 0.15);
+      fill.style.opacity = flick;
+      anchorSets[i].forEach(function (a, j) { var ap = seg(t, drawStart[i] + j * 0.05, drawStart[i] + j * 0.05 + 0.1); a.style.opacity = ap * (1 - seg(t, 4.75, 5.1)); });
+    });
+
+    /* половинки X: чертёж на месте, затем прилёт заливки */
+    [["armT", -1, 4], ["armB", 1, 5]].forEach(function (a) {
+      var gEl = $(a[0]), line = gEl.querySelector(".line"), fill = gEl.querySelector(".fill");
+      var lp = E.io3(seg(t, 3.9, 4.4));
+      line.style.strokeDasharray = "1"; line.style.strokeDashoffset = String(1 - lp);
+      line.style.opacity = t < 3.9 ? 0 : 1 - seg(t, 5.2, 5.4);
+      var fp = E.in3(seg(t, 4.95, 5.24));
+      var dx = (1 - fp) * 420, dy = a[1] * (1 - fp) * 300;
+      fill.setAttribute("transform", "translate(" + dx.toFixed(2) + " " + dy.toFixed(2) + ")");
+      fill.style.opacity = t < 4.95 ? 0 : 1;
+      anchorSets[a[2]].forEach(function (an) { an.style.opacity = seg(t, 4.1, 4.2) * (1 - seg(t, 5.0, 5.25)); });
+    });
+
+    /* удар 5.25: глитч, прицел, тряска */
+    var hit = seg(t, 5.25, 5.55), hitOn = t >= 5.25 && t < 5.55;
+    var amp = hitOn ? (1 - hit) : 0;
+    var shakeX = hitOn ? (hash(fr * 5) - 0.5) * 14 * amp * k / 0.6 : 0, shakeY = hitOn ? (hash(fr * 9) - 0.5) * 8 * amp : 0;
+    logo.style.transform = "translate(" + shakeX + "px," + shakeY + "px)";
+    [["ghR", -1], ["ghC", 1]].forEach(function (gh) {
+      var el = $(gh[0]);
+      if (!hitOn) { el.style.opacity = 0; return; }
+      var off = gh[1] * (10 + hash(fr + gh[1]) * 16) * amp * (W / 1920) * 1.6;
+      el.style.opacity = (0.9 * amp).toFixed(3);
+      el.style.transform = "translate(" + (off + shakeX) + "px," + ((hash(fr * 2 + gh[1]) - 0.5) * 10 * amp) + "px)";
+      var cut = hash(fr * 11 + gh[1]) * 70;
+      el.style.clipPath = "inset(" + cut + "% 0 " + Math.max(0, 80 - cut - 30 * amp) + "% 0)";
+    });
+    var ring = $("ring"), rp = E.out3(seg(t, 5.25, 5.75)), rr = LH * lerp(1.45, 0.95, rp);
+    var xc = LX + 856 * k, yc = LY + LH / 2;
+    ring.style.width = ring.style.height = (rr * 2) + "px"; place(ring, xc - rr, yc - rr);
+    ring.style.opacity = t < 5.25 ? 0 : (1 - seg(t, 5.45, 5.8));
+    $("flash").style.opacity = t >= 5.25 && t < 5.3 ? 0.1 * (1 - seg(t, 5.25, 5.3)) : 0;
+
+    /* «_» после удара, мигает */
+    var under = $("under");
+    var uOn = t >= 5.4 && (t < 6.4 || Math.floor((t - 6.4) / 0.52) % 2 === 0);
+    if (t >= 5.4 && t < 5.55) uOn = hash(fr * 31) > 0.4;
+    under.style.opacity = uOn ? 1 : 0;
+
+    /* подпись: дешифровка */
+    var tp = seg(t, 5.8, 6.35), outTag = "";
+    for (var ti = 0; ti < TAG.length; ti++) {
+      var ch = TAG[ti];
+      if (ch === " ") { outTag += " "; continue; }
+      if (tp <= 0) { outTag += " "; continue; }
+      var rv = tp * 1.25 - 0.12;
+      if (ti / TAG.length < rv) outTag += ch === "·" ? "<s>·</s>" : ch;
+      else if (ti / TAG.length < rv + 0.22) outTag += "<s>" + GLYPH[Math.floor(hash(fr * 5 + ti) * GLYPH.length)] + "</s>";
+      else outTag += " ";
+    }
+    $("tag").innerHTML = outTag; $("emTag").innerHTML = TAG.replace(/·/g, "<s>·</s>");
+
+    /* финал A: изумрудная волна по буквам */
+    var ids = ["L0", "L1", "L2", "L3", "L4"];
+    ids.forEach(function (id, i) {
+      var f = $(id).querySelector(".fill"), wp = END === "dark" ? seg(t, 7.0 + i * 0.12, 7.0 + i * 0.12 + 0.34) : 0;
+      var a = Math.sin(Math.PI * wp);
+      f.style.fill = a > 0.01 ? "rgb(" + Math.round(lerp(244, 0, a)) + "," + Math.round(lerp(244, 179, a)) + "," + Math.round(lerp(242, 126, a)) + ")" : "";
+    });
+    ["armT", "armB"].forEach(function (id) {
+      var f = $(id).querySelector(".fill"), wp = END === "dark" ? seg(t, 7.48, 7.82) : 0, a = Math.sin(Math.PI * wp);
+      f.style.fill = a > 0.01 ? "rgb(" + Math.round(lerp(244, 0, a)) + "," + Math.round(lerp(244, 179, a)) + "," + Math.round(lerp(242, 126, a)) + ")" : "";
+    });
+
+    /* финал B: изумрудная заливка с шевронным фронтом */
+    var em = $("emLayer");
+    if (END === "em" && t >= 6.95) {
+      var wpp = E.io3(seg(t, 6.95, 7.6)), tip = H * 0.42;
+      var front = lerp(-tip - 20, W + 20, wpp);
+      em.style.display = "";
+      em.style.clipPath = "polygon(-10px -10px," + front + "px -10px," + (front + tip) + "px " + H / 2 + "px," + front + "px " + (H + 10) + "px,-10px " + (H + 10) + "px)";
+      var eu = $("emUnder"); eu.style.opacity = (t < 7.6 || Math.floor((t - 7.6) / 0.52) % 2 === 1) ? 1 : 0;
+      eg.style.transform = "translateX(" + (1 - E.out3(seg(t, 7.1, 8.4))) * W * 0.12 + "px)";
+    } else em.style.display = "none";
+  }
+
+  window.__render = render;
+  window.__meta = { W: W, H: H, FPS: FPS, DUR: DUR, END: END };
+  (document.fonts ? document.fonts.ready : Promise.resolve()).then(function () {
+    measure();
+    var ft = q.get("t");
+    if (ft !== null) { render(parseFloat(ft)); window.__ready = true; return; }
+    window.__ready = true;
+    if (q.get("play") !== null) { var t0 = performance.now(); (function loop() { var t = ((performance.now() - t0) / 1000) % DUR; render(t); requestAnimationFrame(loop); })(); }
+    else render(0);
+  });
+})();
+</script>
+</body>
+</html>
