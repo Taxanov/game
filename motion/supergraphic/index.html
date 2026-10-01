@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>BAVIX supergraphic</title>
+<!--
+  Интро BAVIX, направление «Суперграфика» (брендбук, вариант C): буквы логотипа как огромные обрезанные формы.
+  Каждый кадр — функция времени render(t). Параметры: ?w=1920&h=1080&end=em|white&t=5.25&play
+  Звук: ../logo-intro/audio.m4a. Склейки на щелчки 0.95–1.70 с, удар 2.25, акцент 3.15, главный удар 5.25, волна 7.0–7.6.
+-->
+<style>
+  @font-face { font-family: "Unbounded"; src: url("../../assets/fonts/Unbounded-Variable.woff2") format("woff2"); font-weight: 200 900; }
+  :root { --em: #00B37E; --ink: #111111; --white: #FFFFFF; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #000; overflow: hidden; }
+  #stage { position: relative; overflow: hidden; background: var(--white); }
+  #cam { position: absolute; left: 0; top: 0; overflow: visible; }
+  .track { stroke-width: 1; vector-effect: non-scaling-stroke; }
+  .lbl { position: absolute; font: 500 var(--fs-lbl) / 1 "Unbounded", sans-serif; letter-spacing: .16em; text-transform: uppercase; white-space: nowrap; }
+  #tag { position: absolute; display: flex; gap: .9em; transform: translateX(-50%); font: 500 var(--fs-tag) / 1 "Unbounded", sans-serif; letter-spacing: .32em; text-transform: uppercase; white-space: nowrap; }
+  #tag span { display: inline-block; overflow: hidden; }
+  #tag span i { display: inline-block; font-style: normal; }
+  #tag b { color: var(--em); font-weight: 500; }
+  #emLayer { position: absolute; inset: 0; background: var(--em); color: var(--ink); }
+  #emLayer svg { position: absolute; overflow: visible; }
+  #emTag { position: absolute; display: flex; gap: .9em; transform: translateX(-50%); font: 500 var(--fs-tag) / 1 "Unbounded", sans-serif; letter-spacing: .32em; text-transform: uppercase; white-space: nowrap; color: rgba(17,17,17,.75); }
+  #emTag b { color: var(--ink); font-weight: 500; }
+  #portal { position: absolute; left: 0; top: 0; overflow: visible; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="bx" viewBox="0 0 936.2 130"><path fill="currentColor" fill-rule="evenodd" d="M0,0 H124.25 A37.75,37.75 0 0 1 150.37,65 A37.75,37.75 0 0 1 124.25,130 H0 Z M21,21 H124.25 A16.75,16.75 0 0 1 124.25,54.5 H21 Z M21,75.5 H124.25 A16.75,16.75 0 0 1 124.25,109 H21 Z M228.15,130 L306.15,0 L323.25,0 L401.25,130 L376.76,130 L314.7,26.57 L252.64,130 Z M428.15,0 L506.15,130 L523.25,130 L601.25,0 L576.76,0 L514.7,103.43 L452.64,0 Z M670,0 L691,0 L691,130 L670,130 Z M776.5,0 L806.2,0 L871.2,65 L806.2,130 L776.5,130 L841.5,65 Z M906.5,0 L936.2,0 L882.85,53.35 L868,38.5 Z M906.5,130 L936.2,130 L882.85,76.65 L868,91.5 Z"/></symbol>
+    <symbol id="ex" viewBox="776.5 0 159.7 130"><path fill="currentColor" d="M776.5,0 L806.2,0 L871.2,65 L806.2,130 L776.5,130 L841.5,65 Z M906.5,0 L936.2,0 L882.85,53.35 L868,38.5 Z M906.5,130 L936.2,130 L882.85,76.65 L868,91.5 Z"/></symbol>
+  </defs>
+</svg>
+
+<div id="stage">
+  <svg id="cam">
+    <g id="world">
+      <g id="tracks"></g>
+      <path id="pB" fill-rule="evenodd" d="M0,0 H124.25 A37.75,37.75 0 0 1 150.37,65 A37.75,37.75 0 0 1 124.25,130 H0 Z M21,21 H124.25 A16.75,16.75 0 0 1 124.25,54.5 H21 Z M21,75.5 H124.25 A16.75,16.75 0 0 1 124.25,109 H21 Z"/>
+      <path id="pA" d="M228.15,130 L306.15,0 L323.25,0 L401.25,130 L376.76,130 L314.7,26.57 L252.64,130 Z"/>
+      <path id="pV" d="M428.15,0 L506.15,130 L523.25,130 L601.25,0 L576.76,0 L514.7,103.43 L452.64,0 Z"/>
+      <path id="pI" d="M670,0 L691,0 L691,130 L670,130 Z"/>
+      <path id="pC" d="M776.5,0 L806.2,0 L871.2,65 L806.2,130 L776.5,130 L841.5,65 Z"/>
+      <path id="pT" d="M906.5,0 L936.2,0 L882.85,53.35 L868,38.5 Z"/>
+      <path id="pD" d="M906.5,130 L936.2,130 L882.85,76.65 L868,91.5 Z"/>
+      <rect id="pU" x="966" y="109" width="58" height="21"/>
+    </g>
+  </svg>
+
+  <div class="lbl" id="lTL">IT-студия BAVIX</div>
+  <div class="lbl" id="lTR">2026</div>
+  <div class="lbl" id="lBL">@bavix.kz</div>
+  <div class="lbl" id="lBR">Казахстан · СНГ · мир</div>
+  <div id="tag"></div>
+
+  <svg id="portal" viewBox="776.5 0 94.7 130" preserveAspectRatio="none"><path fill="var(--em)" d="M776.5,0 L806.2,0 L871.2,65 L806.2,130 L776.5,130 L841.5,65 Z"/></svg>
+
+  <div id="emLayer">
+    <svg id="emGhost"><use href="#ex"/></svg>
+    <svg id="emLogo" viewBox="0 0 1024 130"><use href="#bx" width="936.2" height="130"/><rect id="emU" x="966" y="109" width="58" height="21" fill="currentColor"/></svg>
+    <div id="emTag"></div>
+    <div class="lbl" id="eTL" style="color:rgba(17,17,17,.7)">IT-студия BAVIX</div>
+    <div class="lbl" id="eBL" style="color:rgba(17,17,17,.7)">@bavix.kz</div>
+    <div class="lbl" id="eBR" style="color:rgba(17,17,17,.7)">Казахстан · СНГ · мир</div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var q = new URLSearchParams(location.search);
+  var W = +q.get("w") || 1920, H = +q.get("h") || 1080, END = q.get("end") || "em", FPS = 60, DUR = 9;
+  var $ = function (id) { return document.getElementById(id); };
+  var stage = $("stage"); stage.style.width = W + "px"; stage.style.height = H + "px";
+  var cam = $("cam"); cam.setAttribute("width", W); cam.setAttribute("height", H); cam.setAttribute("viewBox", "0 0 " + W + " " + H);
+  var world = $("world");
+
+  var C = { em: "#00B37E", ink: "#111111", white: "#FFFFFF" };
+  var unit = Math.min(W, H), wide = W / H > 1.4;
+  var LW = wide ? W * 0.63 : W * 0.8, k = LW / 1024, LH = 130 * k;
+  var LY = H / 2 - LH / 2 - LH * 0.18;
+  var FIT = { cx: 512, cy: (H / 2 - LY) / k, s: k };
+  stage.style.setProperty("--fs-lbl", Math.max(11, unit * 0.0125) + "px");
+  stage.style.setProperty("--fs-tag", (wide ? W * 0.0095 : W * 0.02) + "px");
+
+  /* поля и безопасные зоны (9:16 — без интерфейса Reels) */
+  var padX = Math.round(unit * 0.05), padT = H / W > 1.6 ? H * 0.13 : Math.round(unit * 0.05), padB = H / W > 1.6 ? H * 0.2 : Math.round(unit * 0.05);
+  function place(el, x, y, tx) { el.style.left = x + "px"; el.style.top = y + "px"; if (tx) el.style.transform = tx; }
+  place($("lTL"), padX, padT); place($("eTL"), padX, padT);
+  place($("lTR"), W - padX, padT, "translateX(-100%)");
+  place($("lBL"), padX, H - padB, "translateY(-100%)"); place($("eBL"), padX, H - padB, "translateY(-100%)");
+  place($("lBR"), W - padX, H - padB, "translate(-100%,-100%)"); place($("eBR"), W - padX, H - padB, "translate(-100%,-100%)");
+
+  /* подпись */
+  var WORDS = ["CRM", "·", "приложения", "·", "сайты", "·", "ИИ"];
+  var tag = $("tag"), emTag = $("emTag"), tagY = LY + LH + LH * (wide ? 0.62 : 0.66);
+  WORDS.forEach(function (w) {
+    var s = document.createElement("span"); s.innerHTML = w === "·" ? "<i><b>·</b></i>" : "<i>" + w + "</i>"; tag.appendChild(s);
+    var e = document.createElement("span"); e.innerHTML = w === "·" ? "<b>·</b>" : w; emTag.appendChild(e);
+  });
+  place(tag, W / 2, tagY); place(emTag, W / 2, tagY);
+
+  /* финальный слой */
+  var emLogo = $("emLogo"); emLogo.style.left = (W - LW) / 2 + "px"; emLogo.style.top = LY + "px"; emLogo.style.width = LW + "px"; emLogo.style.height = LH + "px";
+  var gh = $("emGhost"), ghH = H * 1.15, ghW = ghH * 159.7 / 130; gh.style.width = ghW + "px"; gh.style.height = ghH + "px"; gh.style.opacity = .08;
+  gh.style.left = (W - ghW * (wide ? 0.55 : 0.42)) + "px"; gh.style.top = (H - ghH * 0.85) + "px";
+
+  /* направляющие сетки: вертикальные «рельсы», по которым съезжают буквы */
+  var LET = [
+    { id: "pB", cx: 75, dy: 560, start: 3.15, land: 5.0 },
+    { id: "pA", cx: 314.7, dy: -640, start: 2.55, land: 4.55 },
+    { id: "pV", cx: 514.7, dy: 600, start: 2.85, land: 4.78 },
+    { id: "pI", cx: 680.5, dy: -720, start: 3.4, land: 5.15 },
+    { id: "pC", cx: 823.9, dy: 0, land: 2.25 },
+    { id: "pT", cx: 902, dx: 380, dy: -260, land: 5.245 },
+    { id: "pD", cx: 902, dx: 380, dy: 260, land: 5.245 }
+  ];
+  var tracks = $("tracks"), trackEls = [];
+  [75, 314.7, 514.7, 680.5].forEach(function (x) {
+    var l = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    l.setAttribute("class", "track"); l.setAttribute("x1", x); l.setAttribute("x2", x); l.setAttribute("y1", -4000); l.setAttribute("y2", 4000);
+    tracks.appendChild(l); trackEls.push(l);
+  });
+  ["cap", "base"].forEach(function (n, i) {
+    var l = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    l.setAttribute("class", "track"); l.setAttribute("y1", i * 130); l.setAttribute("y2", i * 130); l.setAttribute("x1", -6000); l.setAttribute("x2", 7000);
+    tracks.appendChild(l); trackEls.push(l);
+  });
+
+  /* ---------- время и сглаживание ---------- */
+  function seg(t, a, b) { return t <= a ? 0 : t >= b ? 1 : (t - a) / (b - a); }
+  function lerp(a, b, p) { return a + (b - a) * p; }
+  var E = {
+    out: function (p) { return 1 - Math.pow(1 - p, 4); },
+    expo: function (p) { return p >= 1 ? 1 : 1 - Math.pow(2, -10 * p); },
+    io: function (p) { return p < .5 ? 8 * p * p * p * p : 1 - Math.pow(-2 * p + 2, 4) / 2; },
+    in: function (p) { return p * p * p; }
+  };
+  var hm = function (m) { return m * H / 130; };   // масштаб: m = во сколько раз высота буквы больше кадра
+
+  /* ---------- плакатные кадры до 2.25 с: склейки на щелчки ---------- */
+  var ALL = ["pB", "pA", "pV", "pI", "pC", "pT", "pD"];
+  var SHOTS = [
+    { t0: 0.00, bg: C.white, fg: C.em, show: ["pA"], a: { cx: 330, cy: 92, m: 2.4 }, b: { cx: 292, cy: 30, m: 2.55 }, move: [0.34, 0.92] },
+    { t0: 0.95, bg: C.em, fg: C.ink, show: ["pV"], a: { cx: 514, cy: 96, m: 1.9 }, b: { cx: 514, cy: 108, m: 2.0 } },
+    { t0: 1.05, bg: C.ink, fg: C.em, show: ["pC", "pT", "pD"], a: { cx: 850, cy: 65, m: 1.45 }, b: { cx: 862, cy: 65, m: 1.5 } },
+    { t0: 1.20, bg: C.white, fg: C.em, show: ["pB"], a: { cx: 112, cy: 72, m: 1.55 }, b: { cx: 118, cy: 66, m: 1.6 } },
+    { t0: 1.35, bg: C.em, fg: C.ink, show: ["pT", "pD", "pC"], a: { cx: 896, cy: 65, m: 2.0 }, b: { cx: 900, cy: 65, m: 2.1 } },
+    { t0: 1.55, bg: C.white, fg: C.ink, show: ["pI", "pV", "pC"], tint: { pV: C.em, pC: C.em }, a: { cx: 676, cy: 65, m: 1.15 }, b: { cx: 690, cy: 65, m: 1.18 } },
+    { t0: 1.70, bg: C.ink, fg: C.em, show: ALL, a: { cx: 760, cy: 65, m: 1.0 }, b: { cx: 840, cy: 65, m: 1.1 } }
+  ];
+
+  var els = {}; ALL.concat(["pU"]).forEach(function (id) { els[id] = $(id); });
+  var labels = ["lTL", "lTR", "lBL", "lBR"].map($);
+
+  function setCam(cx, cy, s) {
+    var tx = W / 2 - cx * s, ty = H / 2 - cy * s;
+    world.setAttribute("transform", "matrix(" + s + " 0 0 " + s + " " + tx + " " + ty + ")");
+  }
+  function hex(a, b, p) {
+    var pa = [1, 3, 5].map(function (i) { return parseInt(a.substr(i, 2), 16); }), pb = [1, 3, 5].map(function (i) { return parseInt(b.substr(i, 2), 16); });
+    return "rgb(" + pa.map(function (v, i) { return Math.round(lerp(v, pb[i], p)); }).join(",") + ")";
+  }
+
+  function render(t) {
+    var fr = Math.round(t * FPS), bg, labelColor;
+    ALL.forEach(function (id) { els[id].removeAttribute("transform"); });
+    trackEls.forEach(function (l) { l.style.opacity = 0; });
+    els.pU.style.opacity = 0;
+
+    if (t < 2.25) {
+      /* ---- плакаты ---- */
+      var sh = SHOTS[0];
+      for (var i = SHOTS.length - 1; i >= 0; i--) if (t >= SHOTS[i].t0) { sh = SHOTS[i]; break; }
+      var next = SHOTS[SHOTS.indexOf(sh) + 1], t1 = next ? next.t0 : 2.25;
+      var p = sh.move ? E.io(seg(t, sh.move[0], sh.move[1])) : seg(t, sh.t0, t1);
+      bg = sh.bg;
+      ALL.forEach(function (id) {
+        var on = sh.show.indexOf(id) >= 0;
+        els[id].style.display = on ? "" : "none";
+        els[id].style.fill = (sh.tint && sh.tint[id]) || sh.fg;
+      });
+      setCam(lerp(sh.a.cx, sh.b.cx, p), lerp(sh.a.cy, sh.b.cy, p), hm(lerp(sh.a.m, sh.b.m, p)));
+      labelColor = bg === C.white ? C.ink : bg === C.em ? C.ink : C.white;
+    } else {
+      /* ---- одно непрерывное движение: отъезд камеры, буквы съезжают по рельсам ---- */
+      bg = C.white;
+      labelColor = C.ink;
+      var zp = 1 - Math.pow(1 - seg(t, 2.25, 5.25), 2.2);
+      var s0 = hm(1.45), s = Math.exp(lerp(Math.log(s0), Math.log(FIT.s), zp));
+      var push = 1 + 0.025 * seg(t, 5.25, 7.0);
+      setCam(lerp(830, FIT.cx, E.io(seg(t, 2.25, 5.25))), lerp(65, FIT.cy, zp), s * push);
+      var landed = t >= 5.245;
+      LET.forEach(function (L) {
+        var el = els[L.id];
+        el.style.display = "";
+        var lp = L.id === "pT" || L.id === "pD" ? E.in(seg(t, 4.95, L.land)) : L.start ? E.io(seg(t, L.start, L.land)) : 1;
+        var dx = (L.dx || 0) * (1 - lp), dy = L.dy * (1 - lp);
+        if ((L.id === "pT" || L.id === "pD") && t < 4.95) el.style.display = "none";
+        el.setAttribute("transform", "translate(" + dx.toFixed(2) + " " + dy.toFixed(2) + ")");
+        /* цвет: изумруд в полёте → графит в момент удара; финал «white» — волна изумруда 7.0–7.8 */
+        var col = landed ? C.ink : C.em;
+        if (END === "white") {
+          var idx = ALL.indexOf(L.id), wp = seg(t, 7.0 + Math.min(idx, 4) * 0.12, 7.0 + Math.min(idx, 4) * 0.12 + 0.36);
+          var a = Math.sin(Math.PI * wp);
+          if (a > 0.01) col = hex(C.ink, C.em, a);
+        }
+        el.style.fill = col;
+      });
+      /* небольшой «щелчок» масштаба на ударе */
+      var kick = t >= 5.245 && t < 5.5 ? 1 + 0.035 * (1 - E.out(seg(t, 5.245, 5.5))) : 1;
+      if (kick !== 1) setCam(FIT.cx, FIT.cy, FIT.s * kick * push);
+      /* рельсы сетки: проявляются к акценту 3.15, уходят после удара */
+      var tr = seg(t, 2.6, 3.15) * (1 - seg(t, 5.3, 5.8));
+      trackEls.forEach(function (l) { l.style.opacity = (0.22 * tr).toFixed(3); l.style.stroke = C.ink; });
+      /* «_» */
+      var uOn = t >= 5.35 && (t < 6.2 || Math.floor((t - 6.2) / 0.52) % 2 === 0);
+      if (t >= 5.35 && t < 5.5) uOn = Math.floor(fr / 3) % 2 === 0;
+      els.pU.style.opacity = uOn ? 1 : 0; els.pU.style.fill = C.em;
+    }
+
+    stage.style.background = bg;
+    labels.forEach(function (l) { l.style.color = labelColor; l.style.opacity = labelColor === C.ink ? .75 : .8; });
+
+    /* подпись: слова выезжают из-под маски по очереди */
+    Array.prototype.forEach.call(tag.children, function (s, i) {
+      var tp = E.expo(seg(t, 5.55 + i * 0.07, 6.15 + i * 0.07));
+      s.firstChild.style.transform = "translateY(" + ((1 - tp) * 110) + "%)";
+      s.style.color = "rgba(17,17,17,.78)";
+    });
+
+    /* финал «em»: шеврон X растёт и становится порталом в изумрудный кадр */
+    var portal = $("portal"), em = $("emLayer");
+    if (END === "em" && t >= 6.98) {
+      var pp = E.io(seg(t, 6.98, 7.6));
+      var cH = LH * lerp(1, 18, pp * pp), cW = cH * 94.7 / 130;
+      var ax = (W - LW) / 2 + 841.5 * k + (FIT.cx - 512) * 0, ay = LY + 65 * k;  // центр шеврона
+      portal.style.display = ""; portal.style.width = cW + "px"; portal.style.height = cH + "px";
+      portal.style.left = (ax - cW * (841.5 - 776.5) / 94.7) + "px"; portal.style.top = (ay - cH / 2) + "px";
+      if (t >= 7.6) {
+        portal.style.display = "none"; em.style.display = "";
+        var lp2 = E.expo(seg(t, 7.6, 8.25));
+        emLogo.style.transform = "translateY(" + ((1 - lp2) * LH * 0.6) + "px)"; emLogo.style.opacity = seg(t, 7.6, 7.85);
+        emTag.style.opacity = seg(t, 7.85, 8.25);
+        gh.style.transform = "translateX(" + ((1 - E.expo(seg(t, 7.6, 8.6))) * W * 0.15) + "px)";
+        $("emU").style.opacity = (t < 8.3 || Math.floor((t - 8.3) / 0.52) % 2 === 1) ? 1 : 0;
+      } else em.style.display = "none";
+    } else { portal.style.display = "none"; em.style.display = "none"; }
+  }
+
+  window.__render = render;
+  window.__meta = { W: W, H: H, FPS: FPS, DUR: DUR, END: END };
+  (document.fonts ? document.fonts.ready : Promise.resolve()).then(function () {
+    var ft = q.get("t");
+    if (ft !== null) { render(parseFloat(ft)); window.__ready = true; return; }
+    window.__ready = true;
+    if (q.get("play") !== null) { var t0 = performance.now(); (function loop() { render(((performance.now() - t0) / 1000) % DUR); requestAnimationFrame(loop); })(); }
+    else render(0);
+  });
+})();
+</script>
+</body>
+</html>

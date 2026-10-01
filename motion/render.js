@@ -2,13 +2,21 @@
  * Рендер интро BAVIX в MP4: покадровые скриншоты сцены → ffmpeg (H.264, 60 fps) + звук оригинала.
  * Нужен локальный сервер из корня репозитория: npx http-server -p 8080 .
  * Запуск: node motion/render.js [формат ...]   форматы: 16x9 4x5 9x16 1x1 (по умолчанию все)
+ * Сцена: SCENE=logo-intro (по умолчанию) или SCENE=supergraphic
  */
 const { chromium } = require(process.env.PLAYWRIGHT_PATH || "playwright");
 const { spawn } = require("child_process");
 const fs = require("fs");
 const path = require("path");
 
-const BASE = process.env.BASE_URL || "http://localhost:8080/motion/logo-intro/index.html";
+const SCENE = process.env.SCENE || "logo-intro";
+const BASE = process.env.BASE_URL || `http://localhost:8080/motion/${SCENE}/index.html`;
+/* у каждой сцены свои финалы и префикс имени файла */
+const SCENES = {
+  "logo-intro": { prefix: "bavix-intro", ends: [["em", "emerald", 8.2], ["dark", "dark", 8.5]], sting: [4.25, 7.85] },
+  "supergraphic": { prefix: "bavix-super", ends: [["em", "emerald", 8.9], ["white", "white", 8.5]], sting: [4.1, 7.9] }
+};
+const SC = SCENES[SCENE];
 const AUDIO = process.env.AUDIO || path.join(__dirname, "logo-intro/audio.m4a");
 const OUT = path.join(__dirname, "out");
 const FPS = 60, DUR = 9;
@@ -18,9 +26,8 @@ const pick = process.argv.slice(2).length ? process.argv.slice(2) : Object.keys(
 /* варианты: полный ролик (изумрудный и тёмный финал) и короткий «стинг» 4.25–7.85 с */
 const JOBS = [];
 for (const f of pick) {
-  JOBS.push({ f, end: "em", from: 0, to: DUR, name: `bavix-intro-${f}-emerald` });
-  JOBS.push({ f, end: "dark", from: 0, to: DUR, name: `bavix-intro-${f}-dark` });
-  JOBS.push({ f, end: "em", from: 4.25, to: 7.85, name: `bavix-sting-${f}`, fade: true });
+  for (const [end, label, still] of SC.ends) JOBS.push({ f, end, still, from: 0, to: DUR, name: `${SC.prefix}-${f}-${label}` });
+  JOBS.push({ f, end: SC.ends[0][0], from: SC.sting[0], to: SC.sting[1], name: `${SC.prefix}-sting-${f}`, fade: true });
 }
 
 function ffmpeg(args) {
@@ -54,7 +61,7 @@ function ffmpeg(args) {
     await new Promise((res, rej) => ff.on("close", c => (c ? rej(new Error("ffmpeg " + c)) : res())));
     /* финальный кадр PNG для превью и постеров */
     if (job.from === 0) {
-      await page.evaluate(t => window.__render(t), job.end === "em" ? 8.2 : 8.5);
+      await page.evaluate(t => window.__render(t), job.still);
       await page.screenshot({ path: path.join(OUT, job.name + "-end.png") });
     }
     console.log(`✓ ${job.name}.mp4  ${frames} кадров за ${((Date.now() - t0) / 1000).toFixed(0)} с`);
