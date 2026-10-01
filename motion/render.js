@@ -2,7 +2,7 @@
  * Рендер интро BAVIX в MP4: покадровые скриншоты сцены → ffmpeg (H.264, 60 fps) + звук оригинала.
  * Нужен локальный сервер из корня репозитория: npx http-server -p 8080 .
  * Запуск: node motion/render.js [формат ...]   форматы: 16x9 4x5 9x16 1x1 (по умолчанию все)
- * Сцена: SCENE=logo-intro (по умолчанию) или SCENE=supergraphic
+ * Сцена: SCENE=logo-intro (по умолчанию), supergraphic или product
  */
 const { chromium } = require(process.env.PLAYWRIGHT_PATH || "playwright");
 const { spawn } = require("child_process");
@@ -14,7 +14,8 @@ const BASE = process.env.BASE_URL || `http://localhost:8080/motion/${SCENE}/inde
 /* у каждой сцены свои финалы и префикс имени файла */
 const SCENES = {
   "logo-intro": { prefix: "bavix-intro", ends: [["em", "emerald", 8.2], ["dark", "dark", 8.5]], sting: [4.25, 7.85] },
-  "supergraphic": { prefix: "bavix-super", ends: [["em", "emerald", 8.9], ["white", "white", 8.5]], sting: [4.1, 7.9] }
+  "supergraphic": { prefix: "bavix-super", ends: [["em", "emerald", 8.9], ["white", "white", 8.5]], sting: [4.1, 7.9] },
+  "product": { prefix: "bavix-product", ends: [["em", "emerald", 8.9], ["white", "white", 8.5]], sting: [4.1, 7.9] }
 };
 const SC = SCENES[SCENE];
 const AUDIO = process.env.AUDIO || path.join(__dirname, "logo-intro/audio.m4a");
