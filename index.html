@@ -4,9 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>BAVIX</title>
-<meta name="description" content="BAVIX — студия разработки: ИИ-ассистенты, CRM, веб-сервисы и приложения для бизнеса в Казахстане.">
-<meta name="theme-color" content="#0b0c0a">
-<link rel="preload" href="assets/fonts/unbounded-cyrillic-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<meta name="description" content="BAVIX — IT-студия для бизнеса: CRM, сайты, мобильные приложения, Telegram-боты и ИИ-ассистенты. Работаем по СНГ и миру.">
+<meta name="theme-color" content="#111111">
+<link rel="preload" href="assets/fonts/Unbounded-Variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/Geologica-Variable.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/fonts.css">
 <link rel="stylesheet" href="assets/style.css">
 </head>
@@ -14,22 +15,9 @@
 <!--BODY-START-->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
-    <symbol id="logo" viewBox="0 0 1208 155">
-      <g fill="none" stroke="currentColor" stroke-width="24">
-        <path d="M12 0V155"/>
-        <path d="M0 12H140A32.75 32.75 0 0 1 140 77.5H12"/>
-        <path d="M12 77.5H148A32.75 32.75 0 0 1 148 143H0"/>
-      </g>
-      <g fill="currentColor">
-        <path d="M273 155L353 0H395L475 155H441L374 24L307 155Z"/>
-        <path d="M515 0H549L613 131L677 0H711L634 155H592Z"/>
-        <rect x="795" y="0" width="26" height="155"/>
-        <path d="M925 0H963L1041 77.5L963 155H925L1003 77.5Z"/>
-        <path d="M1072 0H1110L1040.5 69.5L1021.5 50.5Z"/>
-        <path d="M1072 155H1110L1040.5 85.5L1021.5 104.5Z"/>
-      </g>
-      <rect class="logo-cursor" x="1140" y="130" width="68" height="25" fill="var(--accent)"/>
-    </symbol>
+    <symbol id="bx" viewBox="0 0 936.2 130"><path fill="currentColor" fill-rule="evenodd" d="M0,0 H124.25 A37.75,37.75 0 0 1 150.37,65 A37.75,37.75 0 0 1 124.25,130 H0 Z M21,21 H124.25 A16.75,16.75 0 0 1 124.25,54.5 H21 Z M21,75.5 H124.25 A16.75,16.75 0 0 1 124.25,109 H21 Z M228.15,130 L306.15,0 L323.25,0 L401.25,130 L376.76,130 L314.7,26.57 L252.64,130 Z M428.15,0 L506.15,130 L523.25,130 L601.25,0 L576.76,0 L514.7,103.43 L452.64,0 Z M670,0 L691,0 L691,130 L670,130 Z M776.5,0 L806.2,0 L871.2,65 L806.2,130 L776.5,130 L841.5,65 Z M906.5,0 L936.2,0 L882.85,53.35 L868,38.5 Z M906.5,130 L936.2,130 L882.85,76.65 L868,91.5 Z"/></symbol>
+    <symbol id="ex" viewBox="776.5 0 159.7 130"><path fill="currentColor" d="M776.5,0 L806.2,0 L871.2,65 L806.2,130 L776.5,130 L841.5,65 Z M906.5,0 L936.2,0 L882.85,53.35 L868,38.5 Z M906.5,130 L936.2,130 L882.85,76.65 L868,91.5 Z"/></symbol>
+    <symbol id="chev" viewBox="776.5 0 94.7 130"><path fill="currentColor" d="M776.5,0 L806.2,0 L871.2,65 L806.2,130 L776.5,130 L841.5,65 Z"/></symbol>
   </defs>
 </svg>
 
@@ -38,11 +26,11 @@
 <div class="cursor" aria-hidden="true"><span class="cursor__dot"></span><span class="cursor__ring"><span class="cursor__label"></span></span></div>
 
 <header class="nav" id="nav">
-  <a class="nav__logo" href="#top" aria-label="BAVIX — наверх"><svg><use href="#logo"/></svg></a>
+  <a class="nav__logo" href="#top" aria-label="BAVIX — наверх"><svg viewBox="0 0 936.2 130"><use href="#bx"/></svg></a>
   <nav class="nav__links" aria-label="Разделы">
     <a href="#services" data-scramble>услуги</a>
     <a href="#case" data-scramble>кейс</a>
-    <a href="#process" data-scramble>процесс</a>
+    <a href="#process" data-scramble>этапы</a>
     <a href="#why" data-scramble>почему мы</a>
     <a href="#builder" data-scramble>конструктор</a>
   </nav>
@@ -53,8 +41,9 @@
 </header>
 
 <main id="top">
-  <!-- HERO: копия финального кадра identity.build -->
-  <section class="hero" id="hero">
+  <!-- HERO: финальный кадр identity.build -->
+  <section class="hero" id="hero" data-theme="dark">
+    <svg class="super super--hero" aria-hidden="true"><use href="#ex"/></svg>
     <div class="hero__grid" aria-hidden="true">
       <i style="--x:11%"></i><i style="--x:21.5%"></i><i style="--x:31%"></i><i style="--x:50%"></i><i style="--x:62.5%"></i><i style="--x:69%"></i><i style="--x:78%"></i><i style="--x:89%"></i>
     </div>
@@ -72,130 +61,130 @@
 
     <div class="hero__stage">
       <div class="guides" aria-hidden="true">
-        <div class="guide guide--cap"><span>CAP +155</span></div>
-        <div class="guide guide--mid"><span>MID +77</span></div>
+        <div class="guide guide--cap"><span>CAP +130</span></div>
+        <div class="guide guide--mid"><span>MID +65</span></div>
         <div class="guide guide--base"><span>BASE 0</span></div>
       </div>
 
       <h1 class="hero__logo" id="heroLogo" aria-label="BAVIX">
-        <svg viewBox="0 0 1208 155" aria-hidden="true">
+        <svg viewBox="0 0 1024 130" aria-hidden="true">
           <g class="L" data-depth="1.2">
-            <g class="L__fill" fill="none" stroke="currentColor" stroke-width="24">
-              <path d="M12 0V155"/><path d="M0 12H140A32.75 32.75 0 0 1 140 77.5H12"/><path d="M12 77.5H148A32.75 32.75 0 0 1 148 143H0"/>
-            </g>
-            <g class="L__line" fill="none"><path d="M12 0V155"/><path d="M0 12H140A32.75 32.75 0 0 1 140 77.5H12"/><path d="M12 77.5H148A32.75 32.75 0 0 1 148 143H0"/></g>
+            <path class="L__fill" fill-rule="evenodd" d="M0,0 H124.25 A37.75,37.75 0 0 1 150.37,65 A37.75,37.75 0 0 1 124.25,130 H0 Z M21,21 H124.25 A16.75,16.75 0 0 1 124.25,54.5 H21 Z M21,75.5 H124.25 A16.75,16.75 0 0 1 124.25,109 H21 Z"/>
+            <path class="L__line" d="M0,0 H124.25 A37.75,37.75 0 0 1 150.37,65 A37.75,37.75 0 0 1 124.25,130 H0 Z M21,21 H124.25 A16.75,16.75 0 0 1 124.25,54.5 H21 Z M21,75.5 H124.25 A16.75,16.75 0 0 1 124.25,109 H21 Z"/>
           </g>
           <g class="L" data-depth="-0.8">
-            <path class="L__fill" d="M273 155L353 0H395L475 155H441L374 24L307 155Z"/>
-            <path class="L__line" d="M273 155L353 0H395L475 155H441L374 24L307 155Z"/>
+            <path class="L__fill" d="M228.15,130 L306.15,0 L323.25,0 L401.25,130 L376.76,130 L314.7,26.57 L252.64,130 Z"/>
+            <path class="L__line" d="M228.15,130 L306.15,0 L323.25,0 L401.25,130 L376.76,130 L314.7,26.57 L252.64,130 Z"/>
           </g>
           <g class="L" data-depth="1.6">
-            <path class="L__fill" d="M515 0H549L613 131L677 0H711L634 155H592Z"/>
-            <path class="L__line" d="M515 0H549L613 131L677 0H711L634 155H592Z"/>
+            <path class="L__fill" d="M428.15,0 L506.15,130 L523.25,130 L601.25,0 L576.76,0 L514.7,103.43 L452.64,0 Z"/>
+            <path class="L__line" d="M428.15,0 L506.15,130 L523.25,130 L601.25,0 L576.76,0 L514.7,103.43 L452.64,0 Z"/>
           </g>
           <g class="L" data-depth="-1.3">
-            <path class="L__fill" d="M795 0H821V155H795Z"/>
-            <path class="L__line" d="M795 0H821V155H795Z"/>
+            <path class="L__fill" d="M670,0 L691,0 L691,130 L670,130 Z"/>
+            <path class="L__line" d="M670,0 L691,0 L691,130 L670,130 Z"/>
           </g>
           <g class="L" data-depth="0.9">
-            <path class="L__fill" d="M925 0H963L1041 77.5L963 155H925L1003 77.5Z M1072 0H1110L1040.5 69.5L1021.5 50.5Z M1072 155H1110L1040.5 85.5L1021.5 104.5Z"/>
-            <path class="L__line" d="M925 0H963L1041 77.5L963 155H925L1003 77.5Z M1072 0H1110L1040.5 69.5L1021.5 50.5Z M1072 155H1110L1040.5 85.5L1021.5 104.5Z"/>
+            <path class="L__fill" d="M776.5,0 L806.2,0 L871.2,65 L806.2,130 L776.5,130 L841.5,65 Z M906.5,0 L936.2,0 L882.85,53.35 L868,38.5 Z M906.5,130 L936.2,130 L882.85,76.65 L868,91.5 Z"/>
+            <path class="L__line" d="M776.5,0 L806.2,0 L871.2,65 L806.2,130 L776.5,130 L841.5,65 Z M906.5,0 L936.2,0 L882.85,53.35 L868,38.5 Z M906.5,130 L936.2,130 L882.85,76.65 L868,91.5 Z"/>
           </g>
-          <rect class="hero__cursor" x="1140" y="130" width="68" height="25"/>
+          <rect class="hero__cursor" x="966" y="109" width="58" height="21"/>
         </svg>
-        <span class="hero__ghost hero__ghost--r" aria-hidden="true"><svg viewBox="0 0 1208 155"><use href="#logo"/></svg></span>
-        <span class="hero__ghost hero__ghost--c" aria-hidden="true"><svg viewBox="0 0 1208 155"><use href="#logo"/></svg></span>
+        <span class="hero__ghost hero__ghost--r" aria-hidden="true"><svg viewBox="0 0 1024 130"><use href="#bx" width="936.2" height="130"/><rect x="966" y="109" width="58" height="21" fill="currentColor"/></svg></span>
+        <span class="hero__ghost hero__ghost--c" aria-hidden="true"><svg viewBox="0 0 1024 130"><use href="#bx" width="936.2" height="130"/><rect x="966" y="109" width="58" height="21" fill="currentColor"/></svg></span>
       </h1>
 
-      <div class="dimension" aria-hidden="true"><i></i><span>1208 × 155</span></div>
-      <p class="hero__tag" id="heroTag">приложения <b>·</b> crm <b>·</b> веб-сервисы <b>·</b> ии-ассистенты</p>
+      <div class="dimension" aria-hidden="true"><i></i><span>936 × 130</span></div>
+      <p class="hero__tag" id="heroTag">crm <b>·</b> приложения <b>·</b> сайты <b>·</b> ии-ассистенты</p>
     </div>
 
     <a class="hero__scroll" href="#manifest" data-cursor="↓"><span>scroll</span><i></i></a>
   </section>
 
-  <!-- 01 МАНИФЕСТ -->
-  <section class="section manifest" id="manifest">
+  <!-- 01 О НАС -->
+  <section class="section manifest" id="manifest" data-theme="light">
     <div class="label"><span data-scramble>01 / о нас</span></div>
-    <p class="manifest__text" id="manifestText">Мы&nbsp;— команда разработчиков из&nbsp;Казахстана. Строим ИИ-ассистентов, CRM и&nbsp;веб-сервисы, которые сами находят клиентов, считают цены и&nbsp;готовят предложения. Пока вы&nbsp;занимаетесь делом, система работает 24/7.</p>
+    <p class="manifest__text" id="manifestText">Мы&nbsp;— IT-студия BAVIX, Бейбіт и&nbsp;Али. Делаем CRM, сайты, мобильные приложения, Telegram-ботов и&nbsp;ИИ-ассистентов для бизнеса. Сначала разбираемся, как работает ваш бизнес, потом пишем код.</p>
     <div class="manifest__meta">
-      <div><span class="mono">stack</span><p>Python · TypeScript · LLM API · PostgreSQL · Telegram · WhatsApp</p></div>
-      <div><span class="mono">format</span><p>Под ключ, с&nbsp;фиксированной ценой и&nbsp;исходным кодом, который остаётся у&nbsp;вас</p></div>
+      <div><span class="kicker">география</span><p>Казахстан, СНГ и&nbsp;весь мир. Созвоны онлайн, договор и&nbsp;оплата удалённо.</p></div>
+      <div><span class="kicker">формат</span><p>Под ключ, с&nbsp;фиксированной ценой. Исходный код и&nbsp;доступы остаются у&nbsp;вас.</p></div>
     </div>
   </section>
 
-  <!-- 02 УСЛУГИ: горизонтальный скролл -->
-  <section class="services" id="services">
+  <!-- 02 УСЛУГИ -->
+  <section class="services" id="services" data-theme="ash">
     <div class="services__pin">
       <div class="services__head">
-        <div class="label"><span data-scramble>02 / что делаем</span></div>
-        <h2 class="h2">Системы, которые<br>работают за&nbsp;вас</h2>
+        <div class="label"><span data-scramble>02 / услуги</span></div>
+        <h2 class="h2">Системы, которые <em>работают</em> за&nbsp;вас</h2>
         <div class="services__progress mono"><span id="svcCount">01</span> / 06 <i><b id="svcBar"></b></i></div>
       </div>
       <div class="services__track" id="svcTrack">
         <article class="card tilt" data-cursor="drag">
-          <div class="card__top"><span class="mono">svc/ai-assistant</span><span class="card__ping"></span></div>
+          <div class="card__top"><span class="kicker">crm</span><span class="card__ping"></span></div>
+          <div class="card__viz viz-crm" aria-hidden="true"><i style="--h:40%"></i><i style="--h:65%"></i><i style="--h:52%"></i><i style="--h:88%"></i><i style="--h:74%"></i><i style="--h:96%"></i></div>
+          <h3>CRM-системы</h3>
+          <p>Для компаний, которые теряют заявки в мессенджерах и Excel.</p>
+          <ul class="ticks"><li>Заявки из WhatsApp и Instagram в одну ленту</li><li>Карточки клиентов и история сделок</li><li>Отчёты владельцу в реальном времени</li></ul>
+        </article>
+        <article class="card tilt" data-cursor="drag">
+          <div class="card__top"><span class="kicker">ии</span><span class="card__ping"></span></div>
           <div class="card__viz viz-ai" aria-hidden="true"><span>&gt; найти новые объекты</span><span>&gt; сверить застройщика</span><span>&gt; посчитать КП</span><span class="ok">✓ готово за 4 сек</span></div>
           <h3>ИИ-ассистенты</h3>
-          <p>Находят лидов, читают проекты и документы, считают стоимость и готовят КП. Решение об отправке остаётся за вами.</p>
-          <div class="card__tags"><span>LLM</span><span>парсинг</span><span>расчёты</span></div>
+          <p>Берут на себя рутину: ищут клиентов, читают документы, считают и готовят КП.</p>
+          <ul class="ticks"><li>Поиск лидов и новых объектов</li><li>Расчёты и КП в один клик</li><li>Решение всегда остаётся за вами</li></ul>
         </article>
         <article class="card tilt" data-cursor="drag">
-          <div class="card__top"><span class="mono">svc/crm</span><span class="card__ping"></span></div>
-          <div class="card__viz viz-crm" aria-hidden="true"><i style="--h:40%"></i><i style="--h:65%"></i><i style="--h:52%"></i><i style="--h:88%"></i><i style="--h:74%"></i><i style="--h:96%"></i></div>
-          <h3>CRM и воронки</h3>
-          <p>Сделки, статусы, напоминания и отчёты в одной панели. Строим под ваш процесс, а не подгоняем процесс под коробку.</p>
-          <div class="card__tags"><span>воронка</span><span>роли</span><span>отчёты</span></div>
-        </article>
-        <article class="card tilt" data-cursor="drag">
-          <div class="card__top"><span class="mono">svc/web</span><span class="card__ping"></span></div>
+          <div class="card__top"><span class="kicker">web</span><span class="card__ping"></span></div>
           <div class="card__viz viz-web" aria-hidden="true"><b></b><i></i><i></i><i class="s"></i></div>
-          <h3>Веб-сервисы и&nbsp;панели</h3>
-          <p>Личные кабинеты, админки, калькуляторы и порталы. Быстрые, понятные и доступные с любого устройства.</p>
-          <div class="card__tags"><span>кабинеты</span><span>админки</span><span>API</span></div>
+          <h3>Сайты</h3>
+          <p>Которые приводят заявки, а&nbsp;не просто висят в интернете.</p>
+          <ul class="ticks"><li>Лендинги под рекламу</li><li>Сайты компаний и каталоги</li><li>Заявки сразу в CRM или WhatsApp</li></ul>
         </article>
         <article class="card tilt" data-cursor="drag">
-          <div class="card__top"><span class="mono">svc/bots</span><span class="card__ping"></span></div>
-          <div class="card__viz viz-bot" aria-hidden="true"><span class="in">Новый объект: ЖК White Hill</span><span class="out">Отправить КП</span><span class="in">КП отправлено ✓</span></div>
-          <h3>Telegram и&nbsp;WhatsApp</h3>
-          <p>Уведомления о заявках, напоминания до сроков и отправка КП в одно нажатие прямо из мессенджера.</p>
-          <div class="card__tags"><span>боты</span><span>уведомления</span><span>рассылки</span></div>
-        </article>
-        <article class="card tilt" data-cursor="drag">
-          <div class="card__top"><span class="mono">svc/apps</span><span class="card__ping"></span></div>
+          <div class="card__top"><span class="kicker">app</span><span class="card__ping"></span></div>
           <div class="card__viz viz-app" aria-hidden="true"><b><i></i><i></i><i></i></b><b><i></i><i></i><i></i></b></div>
           <h3>Мобильные приложения</h3>
-          <p>Приложения для клиентов и сотрудников под iOS и Android: заказы, учёт, выезды, push-уведомления.</p>
-          <div class="card__tags"><span>iOS</span><span>Android</span><span>push</span></div>
+          <p>Для клиентов и сотрудников вашего бизнеса.</p>
+          <ul class="ticks"><li>iOS и Android</li><li>Заказы, записи, оплаты, уведомления</li><li>Публикация в App Store и Google Play</li></ul>
         </article>
         <article class="card tilt" data-cursor="drag">
-          <div class="card__top"><span class="mono">svc/data</span><span class="card__ping"></span></div>
+          <div class="card__top"><span class="kicker">bots</span><span class="card__ping"></span></div>
+          <div class="card__viz viz-bot" aria-hidden="true"><span class="in">Новая заявка с сайта</span><span class="out">Взять в работу</span><span class="in">Клиенту отправлено ✓</span></div>
+          <h3>Telegram-боты</h3>
+          <p>Заявки, уведомления и ответы клиентам прямо в мессенджере.</p>
+          <ul class="ticks"><li>Уведомления команде 24/7</li><li>Приём заявок и записей</li><li>Связка с CRM и сайтом</li></ul>
+        </article>
+        <article class="card tilt" data-cursor="drag">
+          <div class="card__top"><span class="kicker">data</span><span class="card__ping"></span></div>
           <div class="card__viz viz-data" aria-hidden="true"><span class="radar"></span></div>
           <h3>Сбор данных</h3>
-          <p>Радары, которые каждую ночь проверяют сайты, каталоги и госреестры и присылают только новое и важное.</p>
-          <div class="card__tags"><span>мониторинг</span><span>госреестр</span><span>24/7</span></div>
+          <p>Радары, которые каждую ночь проверяют сайты, каталоги и госреестры.</p>
+          <ul class="ticks"><li>Мониторинг новых объектов</li><li>Сверка с госреестром</li><li>Только новое и важное</li></ul>
         </article>
       </div>
     </div>
   </section>
 
-  <!-- МАРКИ -->
-  <div class="marquee" aria-hidden="true">
-    <div class="marquee__row" id="marquee1"><span>приложения<b>_</b>crm<b>_</b>веб-сервисы<b>_</b>ии-ассистенты<b>_</b>боты<b>_</b></span><span>приложения<b>_</b>crm<b>_</b>веб-сервисы<b>_</b>ии-ассистенты<b>_</b>боты<b>_</b></span></div>
-    <div class="marquee__row marquee__row--alt" id="marquee2"><span>под ключ · код ваш · фиксированная цена · 24/7 · </span><span>под ключ · код ваш · фиксированная цена · 24/7 · </span></div>
+  <!-- МАРКИ: изумрудный «стоппер» -->
+  <div class="marquee" data-theme="em" aria-hidden="true">
+    <svg class="super super--marquee"><use href="#chev"/></svg>
+    <div class="marquee__row" id="marquee1"><span>crm<b></b>приложения<b></b>сайты<b></b>ии-ассистенты<b></b>боты<b></b></span><span>crm<b></b>приложения<b></b>сайты<b></b>ии-ассистенты<b></b>боты<b></b></span></div>
+    <div class="marquee__row marquee__row--alt" id="marquee2"><span>под ключ · код ваш · фиксированная цена · без посредников · </span><span>под ключ · код ваш · фиксированная цена · без посредников · </span></div>
   </div>
 
   <!-- 03 КЕЙС -->
-  <section class="section case" id="case">
+  <section class="section case" id="case" data-theme="dark">
     <div class="label"><span data-scramble>03 / кейс</span></div>
     <div class="case__grid">
       <div class="case__copy">
-        <h2 class="h2">ИИ-радар новостроек для&nbsp;клининга</h2>
+        <span class="pill">проект</span>
+        <h2 class="h2">ИИ-ассистент для&nbsp;<em>клининга</em></h2>
         <p class="lead">Компания убирает подъезды, офисы и склады в Актау и Актобе. Новые стройки искали вручную, КП собирали с нуля, а конкуренты успевали раньше.</p>
-        <ul class="steps">
-          <li><span class="mono">радар</span>Каждую ночь собирает новостройки: адрес, этажи, квартиры, срок сдачи.</li>
-          <li><span class="mono">реестр</span>Находит застройщика, директора и телефон, ИИ сверяет названия.</li>
-          <li><span class="mono">кп</span>Площадь × цена за м². Готовое КП в фирменном виде и в WhatsApp в одно нажатие.</li>
+        <ul class="ticks ticks--lg">
+          <li>Каждую ночь находит новые ЖК: адрес, этажи, квартиры, срок сдачи</li>
+          <li>Находит застройщика и директора по госреестру, ИИ сверяет названия</li>
+          <li>Считает стоимость уборки по м² и готовит КП в один клик</li>
         </ul>
       </div>
 
@@ -211,69 +200,74 @@
           <div class="app__row" role="row"><span role="cell"><b>Dubai Town</b><small>Актау</small></span><span role="cell">TwoBay Holding</span><span role="cell">2028</span><span role="cell" class="r">1 946 000 ₸</span></div>
         </div>
         <div class="app__totals">
-          <div><span class="mono">разово</span><b><span class="count" data-to="7987000">7 987 000</span> ₸</b></div>
-          <div><span class="mono">каждый месяц</span><b><span class="count" data-to="3995000">3 995 000</span> ₸</b></div>
+          <div><span class="kicker">разово</span><b><span class="count" data-to="7987000">7 987 000</span> ₸</b></div>
+          <div><span class="kicker">каждый месяц</span><b><span class="count" data-to="3995000">3 995 000</span> ₸</b></div>
         </div>
-        <p class="app__note mono">Пилот до договора: 5 реальных ЖК, посчитано по ставкам клиента.</p>
+        <p class="app__note">Пилот до договора: 5 реальных ЖК, посчитано по ставкам клиента.</p>
       </div>
     </div>
 
     <div class="stats">
-      <div class="stat"><b><span class="count" data-to="300">300</span></b><p>новостроек в базе с первого дня</p></div>
+      <div class="stat"><b><span class="count" data-to="300">300</span></b><p>строящихся и новых ЖК в базе с первого дня</p></div>
       <div class="stat"><b>1&nbsp;клик</b><p>от нового объекта до отправленного КП</p></div>
       <div class="stat"><b>1–2&nbsp;мес.</b><p>напоминание до сдачи, чтобы прийти первыми</p></div>
       <div class="stat"><b><span class="count" data-to="6">6</span>&nbsp;нед.</b><p>от первого созвона до запуска</p></div>
     </div>
   </section>
 
-  <!-- 04 ПРОЦЕСС -->
-  <section class="section process" id="process">
-    <div class="label"><span data-scramble>04 / как работаем</span></div>
-    <h2 class="h2">От созвона до&nbsp;запуска</h2>
+  <!-- 04 ЭТАПЫ -->
+  <section class="section process" id="process" data-theme="light">
+    <div class="process__head">
+      <div>
+        <div class="label"><span data-scramble>04 / этапы</span></div>
+        <h2 class="h2">От созвона до&nbsp;запуска</h2>
+      </div>
+      <div class="pill pill--big"><small>разбор задачи</small>бесплатно</div>
+    </div>
     <div class="timeline" id="timeline">
       <div class="timeline__rail" aria-hidden="true"><i id="rail"></i></div>
       <ol class="timeline__list">
-        <li class="tstep"><span class="tstep__dot"></span><span class="mono tstep__n">01 · 30 минут</span><h3>Созвон и&nbsp;разбор</h3><p>Разбираем процесс, цифры и узкие места. Говорим, что можно автоматизировать уже сейчас.</p><code>$ analyze --process</code></li>
-        <li class="tstep"><span class="tstep__dot"></span><span class="mono tstep__n">02 · 1 неделя</span><h3>Прототип и&nbsp;пилот</h3><p>Показываем экраны и результат на ваших реальных данных ещё до подписания договора.</p><code>$ pilot --real-data</code></li>
-        <li class="tstep"><span class="tstep__dot"></span><span class="mono tstep__n">03 · 2–4 недели</span><h3>Разработка</h3><p>Фиксированная цена и сроки в договоре. Показываем готовые части по ходу работы.</p><code>$ build --stage 1..3</code></li>
-        <li class="tstep"><span class="tstep__dot"></span><span class="mono tstep__n">04 · 1 неделя</span><h3>Запуск и&nbsp;обучение</h3><p>Сервер, домен, интеграции, обучение команды. Месяц поддержки бесплатно.</p><code>$ deploy --prod ✓</code></li>
+        <li class="tstep"><span class="tstep__dot"></span><span class="tstep__n">30 минут</span><h3>Созвон и&nbsp;разбор</h3><p>Разбираемся, как работает ваш бизнес, и говорим, что можно автоматизировать.</p><code>$ analyze --process</code></li>
+        <li class="tstep"><span class="tstep__dot"></span><span class="tstep__n">1 неделя</span><h3>Схема и&nbsp;прототип</h3><p>Кликабельные экраны и схема системы. Вы видите продукт до первой строки кода.</p><code>$ prototype --approve</code></li>
+        <li class="tstep"><span class="tstep__dot"></span><span class="tstep__n">2–4 недели</span><h3>Разработка</h3><p>Фиксированная цена и сроки в договоре. Показываем готовые части по ходу работы.</p><code>$ build --stage 1..3</code></li>
+        <li class="tstep"><span class="tstep__dot"></span><span class="tstep__n">1 неделя</span><h3>Запуск и&nbsp;обучение</h3><p>Сервер, домен, интеграции, обучение сотрудников и поддержка после запуска.</p><code>$ deploy --prod ✓</code></li>
       </ol>
     </div>
   </section>
 
   <!-- 05 ПОЧЕМУ -->
-  <section class="section why" id="why">
+  <section class="section why" id="why" data-theme="light">
     <div class="label"><span data-scramble>05 / почему bavix</span></div>
     <div class="why__grid">
-      <h2 class="why__big">Вы работаете <mark>напрямую с&nbsp;разработчиками</mark> без&nbsp;посредников</h2>
+      <h2 class="why__big">Вы работаете <mark>напрямую с&nbsp;разработчиками</mark> без&nbsp;менеджеров-посредников</h2>
       <div class="why__list">
-        <div class="why__item"><span class="mono">pilot</span><h3>Пилот до договора</h3><p>Сначала показываем результат на ваших данных, потом подписываем.</p></div>
-        <div class="why__item"><span class="mono">price</span><h3>Фиксированная цена</h3><p>Сумма в договоре не меняется в процессе работы.</p></div>
-        <div class="why__item"><span class="mono">owner</span><h3>Система — ваша</h3><p>Исходный код, сервер и данные принадлежат вам.</p></div>
-        <div class="why__item"><span class="mono">support</span><h3>На связи после запуска</h3><p>Гарантия на ошибки 6 месяцев, доработки по мере роста.</p></div>
+        <div class="why__item"><span class="why__n">01</span><h3>Под ваши процессы</h3><p>Не подгоняем бизнес под готовый шаблон.</p></div>
+        <div class="why__item"><span class="why__n">02</span><h3>Фиксированная цена</h3><p>Сумма в договоре не меняется в процессе работы.</p></div>
+        <div class="why__item"><span class="why__n">03</span><h3>Код остаётся у вас</h3><p>Исходный код, сервер и данные принадлежат вам. Не привязываем подпиской.</p></div>
+        <div class="why__item"><span class="why__n">04</span><h3>На связи после запуска</h3><p>Обучение сотрудников, гарантия на ошибки, доработки по мере роста.</p></div>
       </div>
     </div>
-    <div class="nums">
-      <div><b><span class="count" data-to="100">100</span>%</b><span class="mono">код и доступы ваши</span></div>
-      <div><b><span class="count" data-to="6">6</span> мес.</b><span class="mono">гарантия на ошибки</span></div>
-      <div><b>1 мес.</b><span class="mono">поддержка бесплатно</span></div>
-      <div><b>24/7</b><span class="mono">система не спит</span></div>
+    <div class="nums" data-theme="dark">
+      <div><b><span class="count" data-to="2">2</span></b><span>основателя: вы общаетесь с теми, кто пишет код</span></div>
+      <div><b><span class="count" data-to="0">0</span></b><span>менеджеров-посредников</span></div>
+      <div><b><span class="count" data-to="100">100</span>%</b><span>кода и доступов — ваши</span></div>
+      <div><b>24/7</b><span>система работает без выходных</span></div>
     </div>
   </section>
 
   <!-- 06 КОНСТРУКТОР -->
-  <section class="section builder" id="builder">
+  <section class="section builder" id="builder" data-theme="ash">
     <div class="label"><span data-scramble>06 / соберите систему</span></div>
     <div class="builder__head">
-      <h2 class="h2">Соберите свою систему</h2>
+      <h2 class="h2">Соберите свою <em>систему</em></h2>
       <p class="lead">Отметьте, что нужно бизнесу. Мы получим готовую заявку в WhatsApp и придём на созвон уже с идеями.</p>
     </div>
     <div class="builder__grid">
       <div class="builder__pick">
         <div class="chips" id="chips" role="group" aria-label="Модули системы">
-          <button type="button" class="chip" aria-pressed="true" data-mod="ai">ИИ-ассистент</button>
           <button type="button" class="chip" aria-pressed="true" data-mod="crm">CRM и воронка</button>
-          <button type="button" class="chip" aria-pressed="false" data-mod="web">Веб-кабинет</button>
+          <button type="button" class="chip" aria-pressed="true" data-mod="ai">ИИ-ассистент</button>
+          <button type="button" class="chip" aria-pressed="false" data-mod="web">Сайт</button>
           <button type="button" class="chip" aria-pressed="true" data-mod="tg">Telegram-бот</button>
           <button type="button" class="chip" aria-pressed="false" data-mod="wa">WhatsApp</button>
           <button type="button" class="chip" aria-pressed="false" data-mod="app">Мобильное приложение</button>
@@ -281,13 +275,13 @@
           <button type="button" class="chip" aria-pressed="false" data-mod="int">Интеграции</button>
         </div>
         <label class="field-label" for="bizNote">Пару слов о бизнесе <span>(необязательно)</span></label>
-        <textarea id="bizNote" class="note" rows="3" placeholder="Например: клининг, 2 города, ищем новых клиентов вручную"></textarea>
+        <textarea id="bizNote" class="note" rows="3" placeholder="Например: сеть автосервисов, 5 филиалов, заявки теряются в WhatsApp"></textarea>
         <div class="builder__send">
           <a class="btn magnetic" id="builderSend" href="https://wa.me/77085071403" target="_blank" rel="noopener" data-cursor="wa"><span>Отправить в WhatsApp</span></a>
-          <span class="mono" id="modCount">модулей: 3</span>
+          <span class="kicker" id="modCount">модулей: 3</span>
         </div>
       </div>
-      <div class="scheme" aria-hidden="true">
+      <div class="scheme" data-theme="dark" aria-hidden="true">
         <div class="scheme__bar mono"><span>system.map</span><span id="schemeStatus">compiled · 3 modules</span></div>
         <svg class="scheme__svg" id="scheme" viewBox="0 0 600 420"></svg>
         <pre class="scheme__log" id="schemeLog"></pre>
@@ -296,50 +290,52 @@
   </section>
 
   <!-- 07 КОНТАКТ -->
-  <section class="section contact" id="contact">
+  <section class="section contact" id="contact" data-theme="dark">
+    <svg class="super super--contact" aria-hidden="true"><use href="#ex"/></svg>
     <div class="label"><span data-scramble>07 / следующий шаг</span></div>
     <h2 class="contact__title">Обсудим ваш проект<span class="blink">_</span></h2>
     <div class="contact__grid">
       <ol class="next">
-        <li><span class="mono">01</span><div><b>Созвон 30 минут</b><p>Разберём задачу и скажем, что можно сделать.</p></div></li>
-        <li><span class="mono">02</span><div><b>Договор и фиксированная цена</b><p>Сроки и стоимость не меняются в процессе.</p></div></li>
-        <li><span class="mono">03</span><div><b>Первые результаты через 2 недели</b><p>Показываем рабочую систему, а не презентации.</p></div></li>
+        <li><span class="next__n">01</span><div><b>Созвон 30 минут</b><p>Уточним детали и ответим на вопросы. Разбор задачи бесплатный.</p></div></li>
+        <li><span class="next__n">02</span><div><b>Договор и предоплата</b><p>Фиксируем сроки и стоимость.</p></div></li>
+        <li><span class="next__n">03</span><div><b>Старт работ</b><p>Через 3 рабочих дня после оплаты.</p></div></li>
       </ol>
-      <div class="people">
-        <div class="person tilt tilt--soft">
-          <span class="mono">сооснователь</span>
+      <div class="people" data-theme="light">
+        <div class="person">
           <h3>Таханов Бейбіт</h3>
+          <span class="person__role">Сооснователь BAVIX</span>
           <p class="person__phone" id="ph1">8 708 507 14 03</p>
           <div class="person__actions">
-            <a class="btn magnetic" href="https://wa.me/77085071403" target="_blank" rel="noopener" data-cursor="wa"><span>WhatsApp</span></a>
-            <button class="btn btn--ghost copy" type="button" data-copy="ph1" data-cursor="copy"><span>Скопировать</span></button>
+            <a class="btn btn--sm magnetic" href="https://wa.me/77085071403" target="_blank" rel="noopener" data-cursor="wa"><span>WhatsApp</span></a>
+            <button class="btn btn--sm btn--ghost copy" type="button" data-copy="ph1" data-cursor="copy"><span>Скопировать</span></button>
           </div>
         </div>
-        <div class="person tilt tilt--soft">
-          <span class="mono">сооснователь</span>
+        <div class="person">
           <h3>Ермекұлы Али</h3>
+          <span class="person__role">Сооснователь BAVIX</span>
           <p class="person__phone" id="ph2">8 705 401 19 43</p>
           <div class="person__actions">
-            <a class="btn magnetic" href="https://wa.me/77054011943" target="_blank" rel="noopener" data-cursor="wa"><span>WhatsApp</span></a>
-            <button class="btn btn--ghost copy" type="button" data-copy="ph2" data-cursor="copy"><span>Скопировать</span></button>
+            <a class="btn btn--sm magnetic" href="https://wa.me/77054011943" target="_blank" rel="noopener" data-cursor="wa"><span>WhatsApp</span></a>
+            <button class="btn btn--sm btn--ghost copy" type="button" data-copy="ph2" data-cursor="copy"><span>Скопировать</span></button>
           </div>
         </div>
-        <p class="people__note">Звоните или пишите в WhatsApp любому из нас.</p>
+        <p class="people__note">Звоните или пишите в WhatsApp любому из нас. Instagram: <a href="https://instagram.com/bavix.kz" target="_blank" rel="noopener">@bavix.kz</a></p>
       </div>
     </div>
   </section>
 </main>
 
-<footer class="footer">
-  <div class="footer__logo" id="footLogo"><svg viewBox="0 0 1208 155" role="img" aria-label="BAVIX"><use href="#logo"/></svg></div>
-  <div class="footer__row mono">
-    <span>$ build ok · 0 errors</span>
-    <span>приложения · crm · веб-сервисы</span>
-    <span>© 2026 bavix</span>
+<footer class="footer" data-theme="em">
+  <div class="footer__logo" id="footLogo"><svg viewBox="0 0 936.2 130" role="img" aria-label="BAVIX"><use href="#bx"/></svg></div>
+  <div class="footer__row">
+    <span class="mono">$ build ok · 0 errors</span>
+    <span>CRM · приложения · сайты · ИИ</span>
+    <a href="https://instagram.com/bavix.kz" target="_blank" rel="noopener">@bavix.kz</a>
+    <span>© 2026 BAVIX</span>
   </div>
 </footer>
 
-<div class="dock" id="dock" aria-hidden="true"><span class="dock__sec" id="dockSec">hero</span><i><b id="dockBar"></b></i><span id="dockPct">00%</span></div>
+<div class="dock" id="dock" aria-hidden="true"><span class="dock__sec" id="dockSec">старт</span><i><b id="dockBar"></b></i><span id="dockPct">00%</span></div>
 
 <div class="console" id="console" role="dialog" aria-modal="false" aria-label="Терминал BAVIX" hidden>
   <div class="console__bar mono"><span>bavix — terminal</span><button type="button" id="termClose" aria-label="Закрыть терминал">esc ✕</button></div>

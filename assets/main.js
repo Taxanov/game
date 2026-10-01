@@ -42,7 +42,26 @@
   var field = { dirty: true, ripples: [] };
   var canvas = $("#field");
   var ctx = canvas.getContext("2d");
-  var dpr = 1, W = 0, H = 0, gap = 32, patBase = null, patBright = null;
+  var dpr = 1, W = 0, H = 0, gap = 32, pats = {};
+  /* цвета точек под фон секции: база, яркая полоса скана, подсветка у курсора */
+  var DOTS = {
+    dark: { base: "rgba(255,255,255,.10)", bright: "rgba(255,255,255,.30)", lit: "0,179,126" },
+    light: { base: "rgba(17,17,17,.10)", bright: "rgba(17,17,17,.26)", lit: "0,130,91" },
+    ash: { base: "rgba(17,17,17,.11)", bright: "rgba(17,17,17,.26)", lit: "0,130,91" },
+    em: { base: "rgba(17,17,17,.16)", bright: "rgba(17,17,17,.34)", lit: "17,17,17" }
+  };
+  var bandEls = $$("main > [data-theme], .footer[data-theme]");
+  var bands = [];
+  function measureBands() {
+    bands = bandEls.map(function (el) {
+      var r = el.getBoundingClientRect();
+      return { top: r.top, bottom: r.bottom, theme: el.getAttribute("data-theme") };
+    });
+  }
+  function themeAt(y) {
+    for (var i = 0; i < bands.length; i++) if (y >= bands[i].top && y < bands[i].bottom) return bands[i].theme;
+    return "dark";
+  }
   var fieldMouse = { x: -9999, y: -9999 };
   var scrollY = window.scrollY, lastDrawnScroll = -1;
 
@@ -63,8 +82,7 @@
     canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     gap = W < 700 ? 26 : 32;
-    patBase = makePattern("rgba(241,242,236,.10)");
-    patBright = makePattern("rgba(241,242,236,.32)");
+    Object.keys(DOTS).forEach(function (k) { pats[k] = { base: makePattern(DOTS[k].base), bright: makePattern(DOTS[k].bright) }; });
     field.dirty = true;
   }
   resizeField();
@@ -96,18 +114,24 @@
     if (!scan && !hasRipple && !field.dirty && scrollY === lastDrawnScroll) return;
     field.dirty = false; lastDrawnScroll = scrollY;
 
+    measureBands();
     ctx.clearRect(0, 0, W, H);
-    ctx.save();
-    ctx.translate(0, offY - gap / 2);
-    ctx.fillStyle = patBase;
-    ctx.fillRect(0, -gap, W, H + gap * 3);
-    if (scan) {
-      ctx.fillStyle = patBright;
-      ctx.globalAlpha = .45; ctx.fillRect(0, scanY - 140 - offY, W, 280);
-      ctx.globalAlpha = .6; ctx.fillRect(0, scanY - 60 - offY, W, 120);
-      ctx.globalAlpha = 1;
-    }
-    ctx.restore();
+    bands.forEach(function (b) {
+      if (b.bottom < 0 || b.top > H) return;
+      var p = pats[b.theme] || pats.dark;
+      ctx.save();
+      ctx.beginPath(); ctx.rect(0, b.top, W, b.bottom - b.top); ctx.clip();
+      ctx.translate(0, offY - gap / 2);
+      ctx.fillStyle = p.base;
+      ctx.fillRect(0, -gap, W, H + gap * 3);
+      if (scan) {
+        ctx.fillStyle = p.bright;
+        ctx.globalAlpha = .45; ctx.fillRect(0, scanY - 140 - offY, W, 280);
+        ctx.globalAlpha = .6; ctx.fillRect(0, scanY - 60 - offY, W, 120);
+        ctx.globalAlpha = 1;
+      }
+      ctx.restore();
+    });
 
     /* зона, где точки нужно рисовать поштучно */
     var zones = [];
@@ -153,7 +177,8 @@
         }
         if (!inside) continue;
         var s = 1.3 + lit * 1.8;
-        ctx.fillStyle = lit > .02 ? "rgba(200,245,58," + (.12 + lit * .88).toFixed(3) + ")" : "rgba(241,242,236,.10)";
+        var dc = DOTS[themeAt(y)] || DOTS.dark;
+        ctx.fillStyle = lit > .02 ? "rgba(" + dc.lit + "," + (.15 + lit * .85).toFixed(3) + ")" : dc.base;
         ctx.fillRect(px - s / 2, py - s / 2, s, s);
       }
     }
@@ -231,10 +256,11 @@
   /* =========================================================
      ДОК: текущая секция и прогресс страницы
      ========================================================= */
+  var nav = $("#nav");
   var dock = $("#dock"), dockSec = $("#dockSec"), dockBar = $("#dockBar"), dockPct = $("#dockPct");
   var sections = [
     ["hero", "старт"], ["manifest", "о нас"], ["services", "услуги"], ["case", "кейс"],
-    ["process", "процесс"], ["why", "почему мы"], ["builder", "конструктор"], ["contact", "контакты"]
+    ["process", "этапы"], ["why", "почему мы"], ["builder", "конструктор"], ["contact", "контакты"]
   ].map(function (p) { return { el: document.getElementById(p[0]), name: p[1] }; });
   var curSec = "";
   var dockQueued = false;
@@ -248,6 +274,9 @@
     sections.forEach(function (s) { if (s.el && s.el.getBoundingClientRect().top < innerHeight * .45) name = s.name; });
     if (name !== curSec) { curSec = name; scramble(dockSec, name); }
     dock.classList.toggle("is-on", window.scrollY > innerHeight * .7 && p < .985);
+    measureBands();
+    var nt = themeAt(36);
+    if (nav.getAttribute("data-theme") !== nt) nav.setAttribute("data-theme", nt);
   }
   window.addEventListener("scroll", function () { if (!dockQueued) { dockQueued = true; requestAnimationFrame(updateDock); } }, { passive: true });
   updateDock();
@@ -258,7 +287,7 @@
   var MODS = {
     ai: { short: "ИИ-ассистент", log: "llm.agent → лиды, расчёты, КП" },
     crm: { short: "CRM", log: "crm.pipeline → сделки и статусы" },
-    web: { short: "Кабинет", log: "web.panel → кабинеты и админка" },
+    web: { short: "Сайт", log: "web.site → сайт и лендинги" },
     tg: { short: "Telegram", log: "tg.bot → уведомления 24/7" },
     wa: { short: "WhatsApp", log: "wa.send → КП в одно нажатие" },
     app: { short: "iOS/Android", log: "mobile.app → приложение" },
@@ -295,14 +324,14 @@
       var pulse = svgEl("circle", { r: 3.5, "class": "pulse", opacity: 0 }, links);
       var motion = svgEl("animateMotion", { dur: (1.4 + i * .13).toFixed(2) + "s", repeatCount: "indefinite", path: d }, pulse);
       var ng = svgEl("g", { "class": "node", transform: "translate(" + nx.toFixed(1) + " " + ny.toFixed(1) + ")" }, scheme);
-      var w = Math.max(84, MODS[key].short.length * 8.6 + 26);
-      svgEl("rect", { x: -w / 2, y: -17, width: w, height: 34 }, ng);
+      var w = Math.max(84, MODS[key].short.length * 9.4 + 28);
+      svgEl("rect", { x: -w / 2, y: -17, width: w, height: 34, rx: 8 }, ng);
       var t = svgEl("text", { x: 0, y: 4, "text-anchor": "middle" }, ng);
       t.textContent = MODS[key].short;
       nodes[key] = { on: on, off: off, len: len, pulse: pulse, g: ng, motion: motion };
     });
     var core = svgEl("g", { "class": "core", transform: "translate(300 210)" }, scheme);
-    svgEl("rect", { x: -78, y: -22, width: 156, height: 44 }, core);
+    svgEl("rect", { x: -82, y: -22, width: 164, height: 44, rx: 10 }, core);
     var ct = svgEl("text", { x: 0, y: 5, "text-anchor": "middle" }, core);
     ct.textContent = "ВАШ БИЗНЕС";
   })();
@@ -372,7 +401,7 @@
         [cmdBtn("services") + " что делаем"],
         [cmdBtn("case") + " кейс: ИИ-радар новостроек"],
         [cmdBtn("builder") + " собрать свою систему"],
-        [cmdBtn("contact") + " телефоны и WhatsApp"],
+        [cmdBtn("contact") + " телефоны, WhatsApp, Instagram"],
         [cmdBtn("build") + " пересобрать логотип"],
         [cmdBtn("glitch") + " сломать страницу на секунду"],
         [cmdBtn("clear") + " очистить · " + cmdBtn("exit") + " закрыть"]
@@ -380,18 +409,19 @@
     },
     about: function () {
       printLines([
-        ["BAVIX — команда разработчиков из Казахстана."],
-        ["Делаем ИИ-ассистентов, CRM, веб-сервисы, ботов и приложения."],
-        ["Работаем напрямую, без посредников. Код и данные — ваши.", "dim"]
+        ["BAVIX — IT-студия: Бейбіт и Али."],
+        ["CRM, сайты, приложения, Telegram-боты и ИИ-ассистенты."],
+        ["Сначала разбираемся, как работает ваш бизнес, потом пишем код.", "dim"],
+        ["Работаем по Казахстану, СНГ и миру.", "dim"]
       ]);
     },
     services: function () {
       printLines([
+        ["<span class='acc'>crm</span>   CRM-системы: заявки, клиенты, оплаты"],
         ["<span class='acc'>ai</span>    ИИ-ассистенты: лиды, расчёты, КП"],
-        ["<span class='acc'>crm</span>   CRM и воронки под ваш процесс"],
-        ["<span class='acc'>web</span>   кабинеты, админки, порталы"],
-        ["<span class='acc'>bots</span>  Telegram и WhatsApp"],
-        ["<span class='acc'>apps</span>  iOS и Android"],
+        ["<span class='acc'>web</span>   сайты, которые приводят заявки"],
+        ["<span class='acc'>apps</span>  мобильные приложения iOS и Android"],
+        ["<span class='acc'>bots</span>  Telegram-боты"],
         ["<span class='acc'>data</span>  радары и сбор данных 24/7"],
         ["→ подробнее: " + cmdBtn("goto services"), "dim"]
       ]);
@@ -402,9 +432,11 @@
       printLines([
         ["Таханов Бейбіт   <span class='acc'>8 708 507 14 03</span>   <a href='https://wa.me/77085071403' target='_blank' rel='noopener'>whatsapp</a>"],
         ["Ермекұлы Али     <span class='acc'>8 705 401 19 43</span>   <a href='https://wa.me/77054011943' target='_blank' rel='noopener'>whatsapp</a>"],
+        ["Instagram: <a href='https://instagram.com/bavix.kz' target='_blank' rel='noopener'>@bavix.kz</a>"],
         ["Звоните или пишите любому из нас.", "dim"]
       ]);
     },
+    instagram: function () { print("<a href='https://instagram.com/bavix.kz' target='_blank' rel='noopener'>instagram.com/bavix.kz</a>"); },
     "goto": function (arg) {
       var map = { hero: "#hero", top: "#hero", about: "#manifest", services: "#services", "case": "#case", process: "#process", why: "#why", builder: "#builder", contact: "#contact" };
       if (!map[arg]) { print("goto: укажите раздел — " + Object.keys(map).join(", "), "err"); return; }
@@ -425,7 +457,7 @@
     },
     whoami: function () { print("гость. скоро — клиент BAVIX."); },
     sudo: function () { print("permission denied. Попробуйте " + cmdBtn("contact") + " — договоримся.", "err"); },
-    ls: function () { print("about  services  case  builder  contact  build  glitch", "dim"); },
+    ls: function () { print("about  services  case  builder  contact  instagram  build  glitch", "dim"); },
     clear: function () { out.innerHTML = ""; },
     exit: function () { closeConsole(); }
   };
@@ -556,6 +588,12 @@
       var ringY = gsap.quickTo(ring, "y", { duration: .45, ease: "power3" });
       dotX(pointer.x); dotY(pointer.y); gsap.set(ring, { x: pointer.x, y: pointer.y });
       frameHooks.push(function () { dotX(pointer.x); dotY(pointer.y); ringX(pointer.x); ringY(pointer.y); });
+      /* курсор перекрашивается под фон под ним */
+      window.addEventListener("pointerover", function (e) {
+        var t = e.target.closest && e.target.closest("[data-theme]");
+        var th = t ? t.getAttribute("data-theme") : "dark";
+        if (cursor.getAttribute("data-theme") !== th) cursor.setAttribute("data-theme", th);
+      }, { passive: true });
       gsap.set(cursor, { opacity: pointer.active ? 1 : 0 });
       window.addEventListener("pointermove", function once() { gsap.to(cursor, { opacity: 1, duration: .3 }); window.removeEventListener("pointermove", once); });
       var labels = { "↘": "↘", "↓": "↓", drag: "тяни", wa: "чат", copy: "copy", cmd: ">_" };
@@ -608,7 +646,6 @@
     });
 
     /* ---------- навигация прячется при скролле вниз ---------- */
-    var nav = $("#nav");
     ST.create({
       start: 0, end: "max",
       onUpdate: function (self) {
@@ -677,6 +714,9 @@
       };
     });
     var ghostR = $(".hero__ghost--r"), ghostC = $(".hero__ghost--c");
+    var superHero = $(".super--hero");
+    var superX = gsap.quickTo(superHero, "x", { duration: 1.4, ease: "power3" });
+    var superY = gsap.quickTo(superHero, "y", { duration: 1.4, ease: "power3" });
     var glitch = 0, heroVisible = true, introRunning = false;
     api.glitch = function (v) { glitch = Math.max(glitch, v); };
     ST.create({ trigger: hero, start: "top bottom", end: "bottom top", onToggle: function (s) { heroVisible = s.isActive; } });
@@ -692,6 +732,7 @@
         if (introRunning) return;
         var nx = (e.clientX / innerWidth - .5) * 2, ny = (e.clientY / innerHeight - .5) * 2;
         letterMove.forEach(function (m) { m.x(nx * 22 * m.depth); m.y(ny * 14 * m.depth); m.r(nx * 2.5 * m.depth); });
+        superX(nx * -40); superY(ny * -30);
       });
       hero.addEventListener("pointerleave", function () { letterMove.forEach(function (m) { m.x(0); m.y(0); m.r(0); }); });
     }
@@ -727,7 +768,8 @@
       .to(".hero__tag, .dimension", { y: -60, opacity: 0, ease: "none" }, 0)
       .to(".guides", { scaleY: 6, opacity: 0, ease: "none" }, 0)
       .to(".hero__grid i", { scaleY: 0, stagger: .02, ease: "none" }, 0)
-      .to(".hud, .hero__scroll", { opacity: 0, ease: "none" }, 0);
+      .to(".hud, .hero__scroll", { opacity: 0, ease: "none" }, 0)
+      .to(superHero, { rotation: -14, scale: 1.25, yPercent: -18, opacity: .08, ease: "none" }, 0);
 
     /* ---------- интро как в ролике identity.build ---------- */
     var hudbar = $("#hudbar"), status = $("#status");
@@ -880,6 +922,8 @@
         el.style.transform = "translate3d(" + x.toFixed(1) + "px,0,0)" + (sk ? " skewX(" + sk.toFixed(2) + "deg)" : "");
       });
     }
+    gsap.fromTo(".super--marquee", { rotation: -20 }, { rotation: 20, ease: "none", scrollTrigger: { trigger: ".marquee", start: "top bottom", end: "bottom top", scrub: true } });
+    gsap.fromTo(".super--contact", { yPercent: 30, xPercent: 12, rotation: -8 }, { yPercent: 0, xPercent: 0, rotation: 0, ease: "none", scrollTrigger: { trigger: ".contact", start: "top bottom", end: "bottom bottom", scrub: .6 } });
     marquee($("#marquee1"), 1.1);
     marquee($("#marquee2"), -0.8);
 

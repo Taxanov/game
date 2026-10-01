@@ -6,7 +6,9 @@
 - `assets/style.css` — стили (токены цвета и шрифтов в начале файла)
 - `assets/main.js` — анимации: интро как в ролике identity.build, поле точек за курсором и волна по клику, глитч логотипа, сценарии на скролле, конструктор системы с заявкой в WhatsApp, терминал (клавиша `/`)
 - `assets/vendor/` — GSAP 3.12.5, ScrollTrigger, Lenis 1.1.13
-- `assets/fonts/` — Unbounded, Onest, JetBrains Mono (OFL, через @fontsource)
+- `assets/fonts/` — фирменные Unbounded и Geologica (из брендбука), JetBrains Mono для HUD и терминала
+
+Цвета бренда: изумруд `#00B37E`, изумруд-текст `#00825B`, подложка `#E2F7EF`, графит `#111111`, белый. Темы секций задаются атрибутом `data-theme` (`dark`, `light`, `ash`, `em`), токены — в начале `style.css`.
 
 ## Запуск локально
 
