@@ -459,7 +459,7 @@ em { font-style: normal; background: var(--em-bg); color: var(--em-fg); padding:
 .person { padding: 22px 0; display: grid; gap: 6px; align-content: start; min-width: 0; }
 .person + .person { border-left: 1px solid var(--line); padding-left: 24px; }
 .person:first-child { padding-right: 24px; }
-.person h3 { font: 700 clamp(17px, 1.5vw, 21px)/1.15 var(--f-display); }
+.person h3 { font: 700 clamp(18px, 1.6vw, 23px)/1.15 var(--f-body); }  /* Geologica: в Unbounded нет казахской «ұ» */
 .person__role { font-size: 14px; color: var(--mute); }
 .person__phone { font: 700 clamp(18px, 1.7vw, 24px)/1.2 var(--f-display); letter-spacing: -.01em; margin-top: 8px; user-select: all; font-variant-numeric: tabular-nums; }
 .person__actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
