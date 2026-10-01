@@ -44,8 +44,12 @@
     <a href="#case" data-scramble>кейс</a>
     <a href="#process" data-scramble>процесс</a>
     <a href="#why" data-scramble>почему мы</a>
+    <a href="#builder" data-scramble>конструктор</a>
   </nav>
-  <a class="btn btn--sm magnetic" href="#contact" data-cursor="↘"><span>Обсудить проект</span></a>
+  <div class="nav__right">
+    <button class="nav__term" id="termOpen" type="button" aria-label="Открыть терминал" data-cursor="cmd"><span>&gt;_</span>терминал</button>
+    <a class="btn btn--sm magnetic" href="#contact" data-cursor="↘"><span>Обсудить проект</span></a>
+  </div>
 </header>
 
 <main id="top">
@@ -257,9 +261,43 @@
     </div>
   </section>
 
-  <!-- 06 КОНТАКТ -->
+  <!-- 06 КОНСТРУКТОР -->
+  <section class="section builder" id="builder">
+    <div class="label"><span data-scramble>06 / соберите систему</span></div>
+    <div class="builder__head">
+      <h2 class="h2">Соберите свою систему</h2>
+      <p class="lead">Отметьте, что нужно бизнесу. Мы получим готовую заявку в WhatsApp и придём на созвон уже с идеями.</p>
+    </div>
+    <div class="builder__grid">
+      <div class="builder__pick">
+        <div class="chips" id="chips" role="group" aria-label="Модули системы">
+          <button type="button" class="chip" aria-pressed="true" data-mod="ai">ИИ-ассистент</button>
+          <button type="button" class="chip" aria-pressed="true" data-mod="crm">CRM и воронка</button>
+          <button type="button" class="chip" aria-pressed="false" data-mod="web">Веб-кабинет</button>
+          <button type="button" class="chip" aria-pressed="true" data-mod="tg">Telegram-бот</button>
+          <button type="button" class="chip" aria-pressed="false" data-mod="wa">WhatsApp</button>
+          <button type="button" class="chip" aria-pressed="false" data-mod="app">Мобильное приложение</button>
+          <button type="button" class="chip" aria-pressed="false" data-mod="data">Сбор данных</button>
+          <button type="button" class="chip" aria-pressed="false" data-mod="int">Интеграции</button>
+        </div>
+        <label class="field-label" for="bizNote">Пару слов о бизнесе <span>(необязательно)</span></label>
+        <textarea id="bizNote" class="note" rows="3" placeholder="Например: клининг, 2 города, ищем новых клиентов вручную"></textarea>
+        <div class="builder__send">
+          <a class="btn magnetic" id="builderSend" href="https://wa.me/77085071403" target="_blank" rel="noopener" data-cursor="wa"><span>Отправить в WhatsApp</span></a>
+          <span class="mono" id="modCount">модулей: 3</span>
+        </div>
+      </div>
+      <div class="scheme" aria-hidden="true">
+        <div class="scheme__bar mono"><span>system.map</span><span id="schemeStatus">compiled · 3 modules</span></div>
+        <svg class="scheme__svg" id="scheme" viewBox="0 0 600 420"></svg>
+        <pre class="scheme__log" id="schemeLog"></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 КОНТАКТ -->
   <section class="section contact" id="contact">
-    <div class="label"><span data-scramble>06 / следующий шаг</span></div>
+    <div class="label"><span data-scramble>07 / следующий шаг</span></div>
     <h2 class="contact__title">Обсудим ваш проект<span class="blink">_</span></h2>
     <div class="contact__grid">
       <ol class="next">
@@ -300,6 +338,17 @@
     <span>© 2026 bavix</span>
   </div>
 </footer>
+
+<div class="dock" id="dock" aria-hidden="true"><span class="dock__sec" id="dockSec">hero</span><i><b id="dockBar"></b></i><span id="dockPct">00%</span></div>
+
+<div class="console" id="console" role="dialog" aria-modal="false" aria-label="Терминал BAVIX" hidden>
+  <div class="console__bar mono"><span>bavix — terminal</span><button type="button" id="termClose" aria-label="Закрыть терминал">esc ✕</button></div>
+  <div class="console__out" id="termOut" aria-live="polite"></div>
+  <form class="console__in" id="termForm" autocomplete="off">
+    <label for="termInput">bavix:~$</label>
+    <input id="termInput" type="text" spellcheck="false" autocapitalize="off" placeholder="help">
+  </form>
+</div>
 
 <script src="assets/vendor/gsap.min.js"></script>
 <script src="assets/vendor/ScrollTrigger.min.js"></script>
